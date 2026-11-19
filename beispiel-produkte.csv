@@ -1,4 +1,7 @@
 ﻿Kategorie;Name;Beschreibung;Preis;Gang;Icon
+"Saisonal";"Streusalz 10 kg";"Taut Eis und Schnee auf Wegen und Einfahrten.";"9,90";"7";"❄️"
+"Saisonal";"Schneeschaufel Aluminium";"Leicht, mit stabiler Kante.";"19,90";"7";"❄️"
+"Saisonal";"LED-Lichterkette 100er";"Warmweiß, für innen und außen.";"14,90";"7";"❄️"
 "Werkzeug";"Akku-Bohrschrauber 18 V";"Zwei Akkus, Ladegerät und Koffer inklusive.";"89,90";"1";"🔨"
 "Werkzeug";"Schlosserhammer 300 g";"Eschenstiel, geschmiedeter Kopf.";"12,50";"1";"🔨"
 "Werkzeug";"Schrauben-Sortiment 200-teilig";"Holzschrauben in sechs Größen.";"14,90";"1";"🔨"
@@ -17,3 +20,6 @@
 "Bad & Sanitär";"Regenduschkopf";"Große Brause, kalkabweisend.";"29,90";"6";"🚿"
 "Bad & Sanitär";"Sanitär-Silikon weiß";"Schimmelhemmend, 310 ml.";"6,50";"6";"🚿"
 "Bad & Sanitär";"WC-Sitz mit Absenkautomatik";"Abnehmbar, leicht zu reinigen.";"39,90";"6";"🚿"
+"Aktionen";"Wandfarbe weiß 5 l";"Aktionspreis, solange der Vorrat reicht.";"14,99";"8";"🏷️"
+"Aktionen";"Werkzeugkoffer 108-teilig";"Aktionspreis, gefüllter Koffer.";"59,90";"8";"🏷️"
+"Aktionen";"Gartenhandschuhe 3er-Set";"Aktionspreis, in drei Größen.";"7,99";"8";"🏷️"

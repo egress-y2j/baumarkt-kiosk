@@ -34,6 +34,12 @@ main{flex:1;overflow:auto;padding:28px 36px}
 .tile small{color:var(--mute);font-size:18px}
 .tile.main{background:var(--acc);color:var(--on-acc);border-color:var(--acc)}
 .tile.main small{color:var(--on-acc)}
+main.home{display:flex;flex-direction:column}
+.home-grid{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:22px;margin-top:20px}
+.home-grid .tile{min-height:0;justify-content:center;align-items:center;text-align:center;gap:14px}
+.home-grid .tile .ic{font-size:clamp(56px,11vh,110px)}
+.home-grid .tile b{font-size:clamp(30px,5vh,52px)}
+.home-grid .tile small{font-size:clamp(17px,2.6vh,24px)}
 .row{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:16px 22px;margin-bottom:12px;text-align:left}
 .gang{background:var(--ink);color:var(--card);border-radius:8px;padding:4px 14px;font:700 26px "Barlow Condensed","Arial Narrow",Arial,sans-serif;white-space:nowrap}
 .price{font-weight:600;white-space:nowrap}
@@ -72,12 +78,11 @@ textarea{min-height:150px;resize:none}
 </header>
 <main id="main"></main>
 </div>
-<div class="overlay" id="attract"><div><h1 id="attractT"></h1><p id="attractS" class="mute"></p></div></div>
 <div class="overlay" id="admin"><div class="panel" id="adminBox"></div></div>
 
 <script>
 // Einstellungen (zum Testen kürzer setzen)
-var IDLE_RESET = 45000, IDLE_ATTRACT = 90000, PIN = "1234";
+var IDLE_RESET = 45000, PIN = "1234";   // nach 45 s ohne Berührung zurück zur Startseite
 
 var T = {
  de:{back:"Zurück",home:"Start",welcome:"Wie können wir helfen?",hSub:"Tippen Sie auf eine Kachel.",
@@ -115,7 +120,7 @@ var T = {
 // Daten kommen aus shops/<id>.json (siehe loadShop)
 var CATS = [], PRODS = [], GANGS = [], SHOP = {}, SID = "demo";
 
-var L = "de", V = {n:"home"}, FB = {}, tReset, tAttract, tThanks;
+var L = "de", V = {n:"home"}, FB = {}, tReset, tThanks;
 var $ = function(s){return document.querySelector(s)}, M = $("#main");
 function t(k){return T[L][k]||k}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
@@ -150,8 +155,8 @@ function render(){
   $("#lang").textContent = L==="de"?"EN":"DE";
   var h = "";
   if(V.n==="home"){
-    h = '<h1>'+t("welcome")+'</h1><p class="mute">'+t("hSub")+'</p><div class="grid" style="margin-top:22px">'+
-      tile("main","🧰",t("discover"),t("discoverS"),"go('cats')")+tile("","🔎",t("search"),t("searchS"),"go('search')")+
+    h = '<h1>'+t("welcome")+'</h1><p class="mute">'+t("hSub")+'</p><div class="home-grid">'+
+      tile("","🔎",t("search"),t("searchS"),"go('search')")+tile("main","🧰",t("discover"),t("discoverS"),"go('cats')")+
       tile("","🧭",t("aisles"),t("aislesS"),"go('aisles')")+tile("","💬",t("fb"),t("fbS"),"startFb()")+'</div>';
   }else if(V.n==="cats"){
     h = '<h2>'+t("cats")+'</h2><div class="grid" style="margin-top:18px">'+CATS.map(function(c,i){return tile("",esc(c[0]),cat(i),PRODS.filter(function(p){return p[1]===i}).length+" "+t("items"),"go('list',{c:"+i+"})")}).join("")+'</div>';
@@ -174,7 +179,7 @@ function render(){
         '<div class="lights" style="margin:20px 0">'+[[2,"var(--ok)","🙂","good"],[1,"var(--mid)","😐","ok"],[0,"var(--bad)","🙁","bad"]].map(function(o){
         return '<button class="light'+(cur===o[0]?' sel':'')+'" onclick="pick('+s+','+o[0]+')"><span style="background:'+o[1]+'"></span><i>'+o[2]+'</i>'+t(o[3])+'</button>'}).join("")+'</div>'+
         '<div style="max-width:900px"><textarea id="cq" maxlength="300" style="min-height:100px" placeholder="'+t("cph")+'">'+esc(FB["c"+s]||"")+'</textarea><p class="mute" style="margin:6px 0 0;font-size:16px">'+t("cnote")+'</p></div>'+
-        '<button class="btn" id="nx" style="margin-top:18px" onclick="nextQ('+s+')"'+(cur===undefined?' disabled':'')+'>'+t("next")+'</button>';
+        '<button class="btn" id="nx" style="margin-top:18px" onclick="nextQ('+s+')">'+t("next")+'</button>';
     }else if(s===4){
       h = '<h1>'+t("commentT")+'</h1><div style="max-width:800px;margin:24px 0"><textarea id="cm" maxlength="500" placeholder="'+t("commentP")+'">'+esc(FB.c||"")+'</textarea></div><button class="btn" onclick="FB.c=$(\'#cm\').value.trim();go(\'fb\',{s:5})">'+t("next")+'</button> <button class="btn alt" onclick="FB.c=\'\';go(\'fb\',{s:5})">'+t("skip")+'</button>';
     }else if(s===5){
@@ -186,7 +191,7 @@ function render(){
       tThanks = setTimeout(function(){go("home")},6000);
     }
   }
-  M.innerHTML = h;
+  M.className = V.n==="home"?"home":""; M.innerHTML = h;
   if(V.n==="search"){doSearch()}
 }
 function doSearch(){
@@ -195,7 +200,7 @@ function doSearch(){
   r.innerHTML = hits.length?hits.map(prodRow).join(""):'<p class="mute">'+t("none")+'</p>';
 }
 function startFb(){FB={};go("fb",{s:1})}
-function pick(s,v){FB["r"+s]=v;var b=document.querySelectorAll(".light");[2,1,0].forEach(function(x,i){b[i].classList.toggle("sel",x===v)});$("#nx").disabled=false}
+function pick(s,v){if(FB["r"+s]===v)delete FB["r"+s];else FB["r"+s]=v;var b=document.querySelectorAll(".light");[2,1,0].forEach(function(x,i){b[i].classList.toggle("sel",FB["r"+s]===x)})}
 function nextQ(s){var c=$("#cq");FB["c"+s]=c?c.value.trim():"";go("fb",{s:s+1})}
 function finish(withMail){
   if(withMail){
@@ -203,20 +208,22 @@ function finish(withMail){
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(m)||!ok){$("#err").textContent=/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(m)?t("consent"):t("bad_email");return}
     store("nl",{email:m,ts:Date.now()});   // getrennt vom Feedback, keine Verknüpfung
   }
-  store("fb",{a:FB.r1,p:FB.r2,s:FB.r3,c:FB.c||"",ca:FB.c1||"",cp:FB.c2||"",cs:FB.c3||"",sh:SID,ts:Date.now()});
+  if(FB.r1!==undefined||FB.r2!==undefined||FB.r3!==undefined||FB.c||FB.c1||FB.c2||FB.c3)store("fb",{a:FB.r1,p:FB.r2,s:FB.r3,c:FB.c||"",ca:FB.c1||"",cp:FB.c2||"",cs:FB.c3||"",sh:SID,ts:Date.now()});
   FB = {}; go("fb",{s:6});
 }
 
 // Auto-Reset und Ruhemodus
 function activity(){
-  clearTimeout(tReset);clearTimeout(tAttract);$("#attract").classList.remove("on");
+  clearTimeout(tReset);
   tReset = setTimeout(function(){if(!$("#admin").classList.contains("on")&&V.n!=="home"){FB={};go("home")}},IDLE_RESET);
-  tAttract = setTimeout(function(){if(!$("#admin").classList.contains("on")){FB={};go("home");$("#attract").classList.add("on")}},IDLE_ATTRACT);
 }
+// Bildschirm anlassen (Wake Lock), wird beim Zurückkehren in die App erneut angefordert
+function keepAwake(){try{if("wakeLock" in navigator)navigator.wakeLock.request("screen").catch(function(){})}catch(e){}}
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")keepAwake()});
 ["pointerdown","keydown"].forEach(function(e){document.addEventListener(e,activity,true)});
 
 // Sprache
-$("#lang").onclick = function(){L=L==="de"?"en":"de";document.documentElement.lang=L;$("#attractT").textContent=t("attractT");$("#attractS").textContent=t("attractS");render()};
+$("#lang").onclick = function(){L=L==="de"?"en":"de";document.documentElement.lang=L;render()};
 $("#back").onclick = function(){
   if(V.n==="prod")go("list",{c:PRODS[V.i][1]});else if(V.n==="list")go(V.g!==undefined?"aisles":"cats");else if(V.n==="fb"&&V.s>1&&V.s<6){var cq=$("#cq");if(cq&&V.s<=3)FB["c"+V.s]=cq.value.trim();go("fb",{s:V.s-1})}else go("home");
 };
@@ -238,8 +245,7 @@ function showStats(){
   $("#adminBox").innerHTML='<h2>Admin</h2><p>'+t("total")+': <b>'+f.length+'</b> · '+t("nlCount")+': <b>'+n+'</b></p>'+rows+'<p><b>'+t("lastC")+'</b></p><ul>'+cm+'</ul><button class="btn alt" onclick="try{localStorage.removeItem(\'fb\');localStorage.removeItem(\'nl\')}catch(e){}showStats()">'+t("wipe")+'</button> <button class="btn" onclick="closeAdmin()">'+t("close")+'</button>';
 }
 
-$("#attractT").textContent=t("attractT");$("#attractS").textContent=t("attractS");
-activity();loadShop();
+activity();loadShop();keepAwake();
 if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
 </script>
 </body>

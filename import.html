@@ -14,7 +14,7 @@ button.p{background:#ffc400;border-color:#ffc400;color:#1f2a30;font-weight:600}b
 .g{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}@media(max-width:600px){.g{grid-template-columns:1fr}}
 </style></head><body>
 <h1>Kiosk-Daten erstellen</h1>
-<p>Excel-Tabelle als <b>CSV UTF-8</b> speichern, hier auswählen, prüfen lassen und die fertige JSON-Datei herunterladen. Die Datei bleibt auf deinem Rechner, es wird nichts hochgeladen.</p>
+<p>Excel-Tabelle als <b>CSV UTF-8</b> speichern, hier auswählen, prüfen lassen und die fertige JSON-Datei herunterladen. Die Datei bleibt auf deinem Rechner, es wird nichts hochgeladen. Die Kategorien „Saisonal“ (ganz vorne) und „Aktionen“ (ganz hinten) werden automatisch einsortiert.</p>
 <button id="tpl">Vorlage (CSV) herunterladen</button>
 <div class="g">
 <div><label for="id">Laden-Kennung (nur a–z, 0–9, Bindestrich)</label><input id="id" value="baumarkt-muster"></div>
@@ -55,6 +55,7 @@ function build(text){
     else if(!cats[ci].icon||cats[ci].icon==="📦"){var ic=get(r,"icon");if(ic)cats[ci].icon=ic}
     prods.push({name:nm,category:c,price:pr,description:get(r,"description"),aisle:g})});
   if(cats.length>12)W.push(cats.length+" Kategorien sind viele für eine Kachelansicht.");
+  var rk=function(n){n=n.toLowerCase();return n==="saisonal"?0:n==="aktionen"?2:1};cats=cats.map(function(c,i){return [c,i]}).sort(function(a,b){return rk(a[0].name)-rk(b[0].name)||a[1]-b[1]}).map(function(x){return x[0]});
   var hex=$("ac").value,l=(parseInt(hex.substr(1,2),16)*.299+parseInt(hex.substr(3,2),16)*.587+parseInt(hex.substr(5,2),16)*.114);
   return {E:E,W:W,D:{name:$("nm").value.trim(),logo:$("lg").value.trim(),accent:hex,accentText:l>150?"#1f2a30":"#ffffff",categories:cats,products:prods}}}
 function run(){var f=$("f").files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){

@@ -1,9 +1,13 @@
 {
- "name": "Baumarkt Muster",
+ "name": "Store Muster",
  "logo": "🔧",
  "accent": "#ffc400",
  "accentText": "#1f2a30",
  "categories": [
+  {
+   "name": "Saisonal",
+   "icon": "❄️"
+  },
   {
    "name": "Werkzeug",
    "icon": "🔨"
@@ -27,6 +31,10 @@
   {
    "name": "Bad & Sanitär",
    "icon": "🚿"
+  },
+  {
+   "name": "Aktionen",
+   "icon": "🏷️"
   }
  ],
  "products": [
@@ -155,6 +163,48 @@
    "price": "39,90",
    "description": "Abnehmbar, leicht zu reinigen.",
    "aisle": "6"
+  },
+  {
+   "name": "Streusalz 10 kg",
+   "category": "Saisonal",
+   "price": "9,90",
+   "description": "Taut Eis und Schnee auf Wegen und Einfahrten.",
+   "aisle": "7"
+  },
+  {
+   "name": "Schneeschaufel Aluminium",
+   "category": "Saisonal",
+   "price": "19,90",
+   "description": "Leicht, mit stabiler Kante.",
+   "aisle": "7"
+  },
+  {
+   "name": "LED-Lichterkette 100er",
+   "category": "Saisonal",
+   "price": "14,90",
+   "description": "Warmweiß, für innen und außen.",
+   "aisle": "7"
+  },
+  {
+   "name": "Wandfarbe weiß 5 l",
+   "category": "Aktionen",
+   "price": "14,99",
+   "description": "Aktionspreis, solange der Vorrat reicht.",
+   "aisle": "8"
+  },
+  {
+   "name": "Werkzeugkoffer 108-teilig",
+   "category": "Aktionen",
+   "price": "59,90",
+   "description": "Aktionspreis, gefüllter Koffer.",
+   "aisle": "8"
+  },
+  {
+   "name": "Gartenhandschuhe 3er-Set",
+   "category": "Aktionen",
+   "price": "7,99",
+   "description": "Aktionspreis, in drei Größen.",
+   "aisle": "8"
   }
  ]
 }
