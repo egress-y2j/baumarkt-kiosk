@@ -1,0 +1,160 @@
+{
+ "name": "Baumarkt Muster",
+ "logo": "🔧",
+ "accent": "#ffc400",
+ "accentText": "#1f2a30",
+ "categories": [
+  {
+   "name": "Werkzeug",
+   "icon": "🔨"
+  },
+  {
+   "name": "Farben & Lacke",
+   "icon": "🎨"
+  },
+  {
+   "name": "Garten",
+   "icon": "🌱"
+  },
+  {
+   "name": "Elektro & Licht",
+   "icon": "💡"
+  },
+  {
+   "name": "Holz & Baustoffe",
+   "icon": "🪵"
+  },
+  {
+   "name": "Bad & Sanitär",
+   "icon": "🚿"
+  }
+ ],
+ "products": [
+  {
+   "name": "Akku-Bohrschrauber 18 V",
+   "category": "Werkzeug",
+   "price": "89,90",
+   "description": "Zwei Akkus, Ladegerät und Koffer inklusive.",
+   "aisle": "1"
+  },
+  {
+   "name": "Schlosserhammer 300 g",
+   "category": "Werkzeug",
+   "price": "12,50",
+   "description": "Eschenstiel, geschmiedeter Kopf.",
+   "aisle": "1"
+  },
+  {
+   "name": "Schrauben-Sortiment 200-teilig",
+   "category": "Werkzeug",
+   "price": "14,90",
+   "description": "Holzschrauben in sechs Größen.",
+   "aisle": "1"
+  },
+  {
+   "name": "Wandfarbe weiß 10 l",
+   "category": "Farben & Lacke",
+   "price": "39,90",
+   "description": "Matt, tropffrei, für Innenräume.",
+   "aisle": "2"
+  },
+  {
+   "name": "Holzlasur Eiche 2,5 l",
+   "category": "Farben & Lacke",
+   "price": "27,50",
+   "description": "Schützt Holz im Innen- und Außenbereich.",
+   "aisle": "2"
+  },
+  {
+   "name": "Malerrollen-Set, 5-teilig",
+   "category": "Farben & Lacke",
+   "price": "9,95",
+   "description": "Rolle, Wanne, Pinsel und Abdeckfolie.",
+   "aisle": "2"
+  },
+  {
+   "name": "Gartenschlauch 20 m",
+   "category": "Garten",
+   "price": "24,90",
+   "description": "Knickfest, mit Spritzpistole.",
+   "aisle": "3"
+  },
+  {
+   "name": "Blumenerde 40 l",
+   "category": "Garten",
+   "price": "6,99",
+   "description": "Torfreduziert, für Balkon und Beet.",
+   "aisle": "3"
+  },
+  {
+   "name": "Astschere",
+   "category": "Garten",
+   "price": "17,90",
+   "description": "Schneidet Äste bis 25 mm.",
+   "aisle": "3"
+  },
+  {
+   "name": "LED-Lampe E27, 4er-Pack",
+   "category": "Elektro & Licht",
+   "price": "8,99",
+   "description": "Warmweiß, sparsam und langlebig.",
+   "aisle": "4"
+  },
+  {
+   "name": "Steckdosenleiste 6-fach",
+   "category": "Elektro & Licht",
+   "price": "11,90",
+   "description": "Mit Überspannungsschutz und Schalter.",
+   "aisle": "4"
+  },
+  {
+   "name": "Kabeltrommel 25 m",
+   "category": "Elektro & Licht",
+   "price": "34,90",
+   "description": "Für den Außeneinsatz geeignet.",
+   "aisle": "4"
+  },
+  {
+   "name": "Konstruktionsholz 4 m",
+   "category": "Holz & Baustoffe",
+   "price": "9,50",
+   "description": "Fichte, gehobelt, 6 × 8 cm.",
+   "aisle": "5"
+  },
+  {
+   "name": "OSB-Platte 18 mm",
+   "category": "Holz & Baustoffe",
+   "price": "21,90",
+   "description": "Für Boden, Wand und Regalbau.",
+   "aisle": "5"
+  },
+  {
+   "name": "Holzleim 750 g",
+   "category": "Holz & Baustoffe",
+   "price": "7,49",
+   "description": "Wasserfest, für Innen und Außen.",
+   "aisle": "5"
+  },
+  {
+   "name": "Regenduschkopf",
+   "category": "Bad & Sanitär",
+   "price": "29,90",
+   "description": "Große Brause, kalkabweisend.",
+   "aisle": "6"
+  },
+  {
+   "name": "Sanitär-Silikon weiß",
+   "category": "Bad & Sanitär",
+   "price": "6,50",
+   "description": "Schimmelhemmend, 310 ml.",
+   "aisle": "6"
+  },
+  {
+   "name": "WC-Sitz mit Absenkautomatik",
+   "category": "Bad & Sanitär",
+   "price": "39,90",
+   "description": "Abnehmbar, leicht zu reinigen.",
+   "aisle": "6"
+  }
+ ]
+}

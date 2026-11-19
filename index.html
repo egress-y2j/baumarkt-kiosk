@@ -48,6 +48,7 @@ textarea{min-height:150px;resize:none}
 .light i{display:block;font-style:normal;font-size:64px;line-height:1.2}
 .light span{display:block;width:70px;height:70px;border-radius:50%;margin:0 auto 12px}
 .light:active{border-color:var(--ink)}
+.light.sel{border-color:var(--ink);box-shadow:0 0 0 4px var(--acc)}
 .detail{display:grid;grid-template-columns:minmax(220px,1fr) 1.4fr;gap:34px;align-items:start;max-width:1000px}
 .pic{background:var(--card);border:2px solid var(--line);border-radius:16px;aspect-ratio:1;display:grid;place-items:center;font-size:120px}
 .big{display:flex;align-items:center;gap:16px;margin:18px 0}
@@ -85,7 +86,7 @@ var T = {
   cats:"Kategorien",aisle:"Gang",price:"Preis",findIn:"Zu finden in",searchPh:"Zum Beispiel „Bohrschrauber“",
   none:"Nichts gefunden. Bitte fragen Sie einen Mitarbeiter.",items:"Artikel",
   q1:"Wie zufrieden sind Sie insgesamt mit Ihrem Besuch?",q2:"Wie zufrieden sind Sie mit unserer Produktauswahl?",q3:"Wie zufrieden sind Sie mit dem Service?",
-  q:"Frage",of:"von",good:"Gut",ok:"Geht so",bad:"Schlecht",
+  q:"Frage",of:"von",good:"Gut",ok:"Geht so",bad:"Schlecht",cph:"Kommentar (freiwillig), z. B. Lob oder Wunsch",cnote:"Bitte keine persönlichen Daten eintragen.",lblA:"Besuch",lblP:"Auswahl",lblS:"Service",lblC:"Sonstiges",
   commentT:"Möchten Sie uns noch etwas mitteilen?",commentP:"Ihre Anmerkung (freiwillig)",next:"Weiter",skip:"Überspringen",
   nlT:"Newsletter erhalten?",nlS:"Freiwillig. Wir informieren Sie über Angebote.",email:"E-Mail-Adresse",
   consent:"Ich willige ein, den Newsletter per E-Mail zu erhalten. Ich kann die Einwilligung jederzeit widerrufen.",
@@ -100,7 +101,7 @@ var T = {
   cats:"Categories",aisle:"Aisle",price:"Price",findIn:"Find it in",searchPh:"For example “drill”",
   none:"Nothing found. Please ask a team member.",items:"items",
   q1:"How satisfied are you with your visit overall?",q2:"How satisfied are you with our product range?",q3:"How satisfied are you with our service?",
-  q:"Question",of:"of",good:"Good",ok:"So-so",bad:"Poor",
+  q:"Question",of:"of",good:"Good",ok:"So-so",bad:"Poor",cph:"Comment (optional), e.g. praise or a wish",cnote:"Please do not enter personal data.",lblA:"Visit",lblP:"Range",lblS:"Service",lblC:"Other",
   commentT:"Anything else you would like to tell us?",commentP:"Your comment (optional)",next:"Next",skip:"Skip",
   nlT:"Receive our newsletter?",nlS:"Optional. We will tell you about offers.",email:"Email address",
   consent:"I agree to receive the newsletter by email. I can withdraw my consent at any time.",
@@ -111,27 +112,38 @@ var T = {
   total:"Feedback entries",nlCount:"Newsletter sign-ups (stored separately)",wrong:"Wrong PIN."}
 };
 
-// Demo-Daten: [Icon, Kategorie DE, Kategorie EN]; Gang = Position + 1
-var CATS = [["🔨","Werkzeug","Tools"],["🎨","Farben & Lacke","Paint"],["🌱","Garten","Garden"],["💡","Elektro & Licht","Electrical"],["🪵","Holz & Baustoffe","Timber"],["🚿","Bad & Sanitär","Bathroom"]];
-var PRODS = [
- ["Akku-Bohrschrauber 18 V",0,"89,90","Zwei Akkus, Ladegerät und Koffer inklusive."],["Schlosserhammer 300 g",0,"12,50","Eschenstiel, geschmiedeter Kopf."],["Schrauben-Sortiment 200-teilig",0,"14,90","Holzschrauben in sechs Größen."],
- ["Wandfarbe weiß 10 l",1,"39,90","Matt, tropffrei, für Innenräume."],["Holzlasur Eiche 2,5 l",1,"27,50","Schützt Holz im Innen- und Außenbereich."],["Malerrollen-Set, 5-teilig",1,"9,95","Rolle, Wanne, Pinsel und Abdeckfolie."],
- ["Gartenschlauch 20 m",2,"24,90","Knickfest, mit Spritzpistole."],["Blumenerde 40 l",2,"6,99","Torfreduziert, für Balkon und Beet."],["Astschere",2,"17,90","Schneidet Äste bis 25 mm."],
- ["LED-Lampe E27, 4er-Pack",3,"8,99","Warmweiß, sparsam und langlebig."],["Steckdosenleiste 6-fach",3,"11,90","Mit Überspannungsschutz und Schalter."],["Kabeltrommel 25 m",3,"34,90","Für den Außeneinsatz geeignet."],
- ["Konstruktionsholz 4 m",4,"9,50","Fichte, gehobelt, 6 × 8 cm."],["OSB-Platte 18 mm",4,"21,90","Für Boden, Wand und Regalbau."],["Holzleim 750 g",4,"7,49","Wasserfest, für Innen und Außen."],
- ["Regenduschkopf",5,"29,90","Große Brause, kalkabweisend."],["Sanitär-Silikon weiß",5,"6,50","Schimmelhemmend, 310 ml."],["WC-Sitz mit Absenkautomatik",5,"39,90","Abnehmbar, leicht zu reinigen."]
-];
+// Daten kommen aus shops/<id>.json (siehe loadShop)
+var CATS = [], PRODS = [], GANGS = [], SHOP = {}, SID = "demo";
 
 var L = "de", V = {n:"home"}, FB = {}, tReset, tAttract, tThanks;
 var $ = function(s){return document.querySelector(s)}, M = $("#main");
 function t(k){return T[L][k]||k}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
-function cat(i){return CATS[i][L==="de"?1:2]}
+function cat(i){return esc(CATS[i][L==="de"?1:2])}
 function store(k,v){try{var a=JSON.parse(localStorage.getItem(k)||"[]");if(v){a.push(v);localStorage.setItem(k,JSON.stringify(a))}return a}catch(e){return []}}
 
+function gCats(g){var o=[];PRODS.forEach(function(p){var n=CATS[p[1]][1];if(p[4]===g&&o.indexOf(n)<0)o.push(n)});return o.join(" · ")}
+function gOfCat(c){var o=[];PRODS.forEach(function(p){if(p[1]===c&&o.indexOf(p[4])<0)o.push(p[4])});return o.join(", ")}
+function applyShop(d){
+  SHOP=d;var names=d.categories.map(function(c){return c.name});
+  CATS=d.categories.map(function(c){return [c.icon||"📦",c.name,c.name]});
+  PRODS=d.products.map(function(p){return [p.name,names.indexOf(p.category),p.price||"",p.description||"",String(p.aisle||"")]}).filter(function(p){return p[1]>-1});
+  GANGS=[];PRODS.forEach(function(p){if(GANGS.indexOf(p[4])<0)GANGS.push(p[4])});
+  GANGS.sort(function(a,b){return a.localeCompare(b,"de",{numeric:true})});
+  if(d.accent){var r=document.documentElement.style;r.setProperty("--acc",d.accent);r.setProperty("--on-acc",d.accentText||"#1f2a30")}
+  $("#logo").innerHTML='<div class="mark">'+esc(d.logo||"🛒")+'</div>'+esc(d.name||"Kiosk");
+  document.title=(d.name||"Kiosk")+" – Kiosk";
+  render();
+}
+function loadShop(){
+  SID=(new URLSearchParams(location.search).get("shop")||"demo").replace(/[^a-zA-Z0-9_-]/g,"");
+  fetch("shops/"+SID+".json").then(function(r){if(!r.ok)throw 0;return r.json()}).then(applyShop).catch(function(){
+    M.innerHTML='<h1>Daten konnten nicht geladen werden</h1><p class="mute">Bitte Internetverbindung prüfen und die Seite neu laden. (Laden: '+esc(SID)+')</p>';
+  });
+}
 function go(n,p){clearTimeout(tThanks);V=Object.assign({n:n},p||{});render();M.scrollTop=0}
 function tile(cls,ic,title,sub,act){return '<button class="tile '+cls+'" onclick="'+act+'"><span class="ic">'+ic+'</span><span><b>'+title+'</b><br><small>'+sub+'</small></span></button>'}
-function prodRow(i){var p=PRODS[i];return '<button class="row" onclick="go(\'prod\',{i:'+i+'})"><span><b>'+esc(p[0])+'</b><br><span class="mute">'+esc(p[3])+'</span></span><span class="price">'+p[2]+' €</span></button>'}
+function prodRow(i){var p=PRODS[i];return '<button class="row" onclick="go(\'prod\',{i:'+i+'})"><span><b>'+esc(p[0])+'</b><br><span class="mute">'+esc(p[3])+'</span></span><span class="price">'+esc(p[2])+' €</span></button>'}
 
 function render(){
   $("#back").hidden = V.n==="home"; $("#back").textContent = "← "+t("back");
@@ -142,23 +154,27 @@ function render(){
       tile("main","🧰",t("discover"),t("discoverS"),"go('cats')")+tile("","🔎",t("search"),t("searchS"),"go('search')")+
       tile("","🧭",t("aisles"),t("aislesS"),"go('aisles')")+tile("","💬",t("fb"),t("fbS"),"startFb()")+'</div>';
   }else if(V.n==="cats"){
-    h = '<h2>'+t("cats")+'</h2><div class="grid" style="margin-top:18px">'+CATS.map(function(c,i){return tile("",c[0],cat(i),t("aisle")+" "+(i+1),"go('list',{c:"+i+"})")}).join("")+'</div>';
+    h = '<h2>'+t("cats")+'</h2><div class="grid" style="margin-top:18px">'+CATS.map(function(c,i){return tile("",esc(c[0]),cat(i),PRODS.filter(function(p){return p[1]===i}).length+" "+t("items"),"go('list',{c:"+i+"})")}).join("")+'</div>';
   }else if(V.n==="list"){
-    h = '<h2>'+cat(V.c)+'</h2><p class="mute">'+t("aisle")+" "+(V.c+1)+'</p>'+PRODS.map(function(p,i){return p[1]===V.c?prodRow(i):""}).join("");
+    var byG = V.g!==undefined, ttl = byG?esc(t("aisle")+" "+GANGS[V.g]):cat(V.c);
+    h = '<h2>'+ttl+'</h2><p class="mute">'+(byG?esc(gCats(GANGS[V.g])):esc(t("aisle")+" "+gOfCat(V.c)))+'</p>'+PRODS.map(function(p,i){return (byG?p[4]===GANGS[V.g]:p[1]===V.c)?prodRow(i):""}).join("");
   }else if(V.n==="prod"){
     var p = PRODS[V.i];
-    h = '<div class="detail"><div class="pic">'+CATS[p[1]][0]+'</div><div><h1>'+esc(p[0])+'</h1><p>'+esc(p[3])+'</p><div class="big"><span class="gang">'+t("aisle")+" "+(p[1]+1)+'</span><span>'+t("findIn")+" "+cat(p[1])+'</span></div><p class="price" style="font-size:34px;margin:0">'+p[2]+' €</p></div></div>';
+    h = '<div class="detail"><div class="pic">'+esc(CATS[p[1]][0])+'</div><div><h1>'+esc(p[0])+'</h1><p>'+esc(p[3])+'</p><div class="big"><span class="gang">'+t("aisle")+" "+esc(p[4])+'</span><span>'+t("findIn")+" "+cat(p[1])+'</span></div><p class="price" style="font-size:34px;margin:0">'+esc(p[2])+' €</p></div></div>';
   }else if(V.n==="search"){
     h = '<h2>'+t("search")+'</h2><div style="margin:16px 0"><input type="search" id="q" placeholder="'+t("searchPh")+'" autocomplete="off" oninput="doSearch()"></div><div id="res"></div>';
   }else if(V.n==="aisles"){
-    h = '<h2>'+t("aisles")+'</h2><div style="margin-top:18px">'+CATS.map(function(c,i){var n=PRODS.filter(function(p){return p[1]===i}).length;
-      return '<button class="row" onclick="go(\'list\',{c:'+i+'})"><span style="display:flex;align-items:center;gap:18px"><span class="gang">'+t("aisle")+" "+(i+1)+'</span><b>'+c[0]+" "+cat(i)+'</b></span><span class="mute">'+n+" "+t("items")+'</span></button>'}).join("")+'</div>';
+    h = '<h2>'+t("aisles")+'</h2><div style="margin-top:18px">'+GANGS.map(function(g,i){var n=PRODS.filter(function(p){return p[4]===g}).length;
+      return '<button class="row" onclick="go(\'list\',{g:'+i+'})"><span style="display:flex;align-items:center;gap:18px"><span class="gang">'+t("aisle")+" "+esc(g)+'</span><b>'+esc(gCats(g))+'</b></span><span class="mute">'+n+" "+t("items")+'</span></button>'}).join("")+'</div>';
   }else if(V.n==="fb"){
     var s = V.s;
     if(s<=3){
+      var cur = FB["r"+s];
       h = '<div class="steps">'+t("q")+" "+s+" "+t("of")+" 3</div><h1>"+t("q"+s)+"</h1>"+
-        '<div class="lights">'+[[2,"var(--ok)","🙂","good"],[1,"var(--mid)","😐","ok"],[0,"var(--bad)","🙁","bad"]].map(function(o){
-        return '<button class="light" onclick="rate('+s+','+o[0]+')"><span style="background:'+o[1]+'"></span><i>'+o[2]+'</i>'+t(o[3])+'</button>'}).join("")+'</div>';
+        '<div class="lights" style="margin:20px 0">'+[[2,"var(--ok)","🙂","good"],[1,"var(--mid)","😐","ok"],[0,"var(--bad)","🙁","bad"]].map(function(o){
+        return '<button class="light'+(cur===o[0]?' sel':'')+'" onclick="pick('+s+','+o[0]+')"><span style="background:'+o[1]+'"></span><i>'+o[2]+'</i>'+t(o[3])+'</button>'}).join("")+'</div>'+
+        '<div style="max-width:900px"><textarea id="cq" maxlength="300" style="min-height:100px" placeholder="'+t("cph")+'">'+esc(FB["c"+s]||"")+'</textarea><p class="mute" style="margin:6px 0 0;font-size:16px">'+t("cnote")+'</p></div>'+
+        '<button class="btn" id="nx" style="margin-top:18px" onclick="nextQ('+s+')"'+(cur===undefined?' disabled':'')+'>'+t("next")+'</button>';
     }else if(s===4){
       h = '<h1>'+t("commentT")+'</h1><div style="max-width:800px;margin:24px 0"><textarea id="cm" maxlength="500" placeholder="'+t("commentP")+'">'+esc(FB.c||"")+'</textarea></div><button class="btn" onclick="FB.c=$(\'#cm\').value.trim();go(\'fb\',{s:5})">'+t("next")+'</button> <button class="btn alt" onclick="FB.c=\'\';go(\'fb\',{s:5})">'+t("skip")+'</button>';
     }else if(s===5){
@@ -179,14 +195,15 @@ function doSearch(){
   r.innerHTML = hits.length?hits.map(prodRow).join(""):'<p class="mute">'+t("none")+'</p>';
 }
 function startFb(){FB={};go("fb",{s:1})}
-function rate(s,v){FB["r"+s]=v;go("fb",{s:s+1})}
+function pick(s,v){FB["r"+s]=v;var b=document.querySelectorAll(".light");[2,1,0].forEach(function(x,i){b[i].classList.toggle("sel",x===v)});$("#nx").disabled=false}
+function nextQ(s){var c=$("#cq");FB["c"+s]=c?c.value.trim():"";go("fb",{s:s+1})}
 function finish(withMail){
   if(withMail){
     var m = $("#em").value.trim(), ok = $("#co").checked;
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(m)||!ok){$("#err").textContent=/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(m)?t("consent"):t("bad_email");return}
     store("nl",{email:m,ts:Date.now()});   // getrennt vom Feedback, keine Verknüpfung
   }
-  store("fb",{a:FB.r1,p:FB.r2,s:FB.r3,c:FB.c||"",ts:Date.now()});
+  store("fb",{a:FB.r1,p:FB.r2,s:FB.r3,c:FB.c||"",ca:FB.c1||"",cp:FB.c2||"",cs:FB.c3||"",sh:SID,ts:Date.now()});
   FB = {}; go("fb",{s:6});
 }
 
@@ -201,7 +218,7 @@ function activity(){
 // Sprache
 $("#lang").onclick = function(){L=L==="de"?"en":"de";document.documentElement.lang=L;$("#attractT").textContent=t("attractT");$("#attractS").textContent=t("attractS");render()};
 $("#back").onclick = function(){
-  if(V.n==="prod")go("list",{c:PRODS[V.i][1]});else if(V.n==="list")go("cats");else if(V.n==="fb"&&V.s>1&&V.s<6)go("fb",{s:V.s-1});else go("home");
+  if(V.n==="prod")go("list",{c:PRODS[V.i][1]});else if(V.n==="list")go(V.g!==undefined?"aisles":"cats");else if(V.n==="fb"&&V.s>1&&V.s<6){var cq=$("#cq");if(cq&&V.s<=3)FB["c"+V.s]=cq.value.trim();go("fb",{s:V.s-1})}else go("home");
 };
 
 // Versteckter Admin-Zugang: Logo 2 Sekunden gedrückt halten
@@ -217,12 +234,12 @@ function checkPin(){if($("#pin").value!==PIN){$("#perr").textContent=t("wrong");
 function showStats(){
   var f=store("fb"),n=store("nl").length,c=function(k,v){return f.filter(function(x){return x[k]===v}).length};
   var rows=[["a",t("q1")],["p",t("q2")],["s",t("q3")]].map(function(r){return '<p style="margin:6px 0"><b>'+esc(r[1])+'</b><br>🙂 '+c(r[0],2)+' &nbsp; 😐 '+c(r[0],1)+' &nbsp; 🙁 '+c(r[0],0)+'</p>'}).join("");
-  var cm=f.filter(function(x){return x.c}).slice(-5).reverse().map(function(x){return '<li>'+esc(x.c)+'</li>'}).join("");
+  var cm=[];f.forEach(function(x){[["ca","lblA"],["cp","lblP"],["cs","lblS"],["c","lblC"]].forEach(function(k){if(x[k[0]])cm.push('<li><b>'+t(k[1])+':</b> '+esc(x[k[0]])+'</li>')})});cm=cm.slice(-8).reverse().join("");
   $("#adminBox").innerHTML='<h2>Admin</h2><p>'+t("total")+': <b>'+f.length+'</b> · '+t("nlCount")+': <b>'+n+'</b></p>'+rows+'<p><b>'+t("lastC")+'</b></p><ul>'+cm+'</ul><button class="btn alt" onclick="try{localStorage.removeItem(\'fb\');localStorage.removeItem(\'nl\')}catch(e){}showStats()">'+t("wipe")+'</button> <button class="btn" onclick="closeAdmin()">'+t("close")+'</button>';
 }
 
 $("#attractT").textContent=t("attractT");$("#attractS").textContent=t("attractS");
-render();activity();
+activity();loadShop();
 if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
 </script>
 </body>

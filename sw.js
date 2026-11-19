@@ -1,10 +1,10 @@
 // Service Worker: speichert die App beim ersten Laden und liefert sie danach auch ohne Internet.
 // Bei Änderungen an der App die Versionsnummer erhöhen (kiosk-v1 -> kiosk-v2).
-var V = "kiosk-v1";
-var CORE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png"];
+var V = "kiosk-v3";
+var CORE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "shops/demo.json"];
 
 self.addEventListener("install", function (e) {
-  e.waitUntil(caches.open(V).then(function (c) { return c.addAll(CORE); }).then(function () { return self.skipWaiting(); }));
+  e.waitUntil(caches.open(V).then(function (c) { return c.addAll(CORE.map(function (u) { return new Request(u, { cache: "reload" }); })); }).then(function () { return self.skipWaiting(); }));
 });
 
 self.addEventListener("activate", function (e) {
