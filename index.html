@@ -35,7 +35,7 @@ main{flex:1;overflow:auto;padding:28px 36px}
 .tile.main{background:var(--acc);color:var(--on-acc);border-color:var(--acc)}
 .tile.main small{color:var(--on-acc)}
 main.home{display:flex;flex-direction:column}
-.home-grid{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:22px;margin-top:20px}
+.home-grid{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:22px}
 .home-grid .tile{min-height:0;justify-content:center;align-items:center;text-align:center;gap:14px}
 .home-grid .tile .ic{font-size:clamp(56px,11vh,110px)}
 .home-grid .tile b{font-size:clamp(30px,5vh,52px)}
@@ -74,7 +74,7 @@ textarea{min-height:150px;resize:none}
 <header>
   <button class="chip" id="back" hidden></button>
   <div class="logo" id="logo"><div class="mark">🔧</div>Baumarkt Muster</div>
-  <button class="chip" id="lang" aria-label="Sprache wechseln">EN</button>
+  <button class="chip" id="lang" aria-label="Sprache wechseln">English</button>
 </header>
 <main id="main"></main>
 </div>
@@ -82,7 +82,7 @@ textarea{min-height:150px;resize:none}
 
 <script>
 // Einstellungen (zum Testen kürzer setzen)
-var IDLE_RESET = 45000, PIN = "1234";   // nach 45 s ohne Berührung zurück zur Startseite
+var VERSION = "v7", IDLE_RESET = 45000, PIN = "1234";   // nach 45 s ohne Berührung zurück zur Startseite
 
 var T = {
  de:{back:"Zurück",home:"Start",welcome:"Wie können wir helfen?",hSub:"Tippen Sie auf eine Kachel.",
@@ -152,10 +152,10 @@ function prodRow(i){var p=PRODS[i];return '<button class="row" onclick="go(\'pro
 
 function render(){
   $("#back").hidden = V.n==="home"; $("#back").textContent = "← "+t("back");
-  $("#lang").textContent = L==="de"?"EN":"DE";
+  $("#lang").textContent = L==="de"?"English":"Deutsch";
   var h = "";
   if(V.n==="home"){
-    h = '<h1>'+t("welcome")+'</h1><p class="mute">'+t("hSub")+'</p><div class="home-grid">'+
+    h = '<div class="home-grid">'+
       tile("","🔎",t("search"),t("searchS"),"go('search')")+tile("","🧰",t("discover"),t("discoverS"),"go('cats')")+
       tile("","🧭",t("aisles"),t("aislesS"),"go('aisles')")+tile("","💬",t("fb"),t("fbS"),"startFb()")+'</div>';
   }else if(V.n==="cats"){
@@ -233,16 +233,17 @@ var hold; var lg=$("#logo");
 lg.addEventListener("pointerdown",function(){hold=setTimeout(openPin,2000)});
 ["pointerup","pointerleave","pointercancel"].forEach(function(e){lg.addEventListener(e,function(){clearTimeout(hold)})});
 function openPin(){
-  $("#adminBox").innerHTML='<h2>'+t("pinT")+'</h2><p><input type="password" id="pin" inputmode="numeric" placeholder="'+t("pinP")+'"></p><p id="perr" style="color:var(--bad);min-height:1.4em"></p><button class="btn" onclick="checkPin()">'+t("open")+'</button> <button class="btn alt" onclick="closeAdmin()">'+t("close")+'</button>';
+  $("#adminBox").innerHTML='<h2>'+t("pinT")+'</h2><p><input type="password" id="pin" inputmode="numeric" placeholder="'+t("pinP")+'"></p><p id="perr" style="color:var(--bad);min-height:1.4em"></p><button class="btn" onclick="checkPin()">'+t("open")+'</button> <button class="btn alt" onclick="closeAdmin()">'+t("close")+'</button>'+ver();
   $("#admin").classList.add("on");
 }
+function ver(){return '<p class="mute" style="margin:20px 0 0;font-size:15px">'+esc((SHOP.name||"Kiosk")+" "+VERSION)+'</p>'}
 function closeAdmin(){$("#admin").classList.remove("on");activity()}
 function checkPin(){if($("#pin").value!==PIN){$("#perr").textContent=t("wrong");return}showStats()}
 function showStats(){
   var f=store("fb"),n=store("nl").length,c=function(k,v){return f.filter(function(x){return x[k]===v}).length};
   var rows=[["a",t("q1")],["p",t("q2")],["s",t("q3")]].map(function(r){return '<p style="margin:6px 0"><b>'+esc(r[1])+'</b><br>🙂 '+c(r[0],2)+' &nbsp; 😐 '+c(r[0],1)+' &nbsp; 🙁 '+c(r[0],0)+'</p>'}).join("");
   var cm=[];f.forEach(function(x){[["ca","lblA"],["cp","lblP"],["cs","lblS"],["c","lblC"]].forEach(function(k){if(x[k[0]])cm.push('<li><b>'+t(k[1])+':</b> '+esc(x[k[0]])+'</li>')})});cm=cm.slice(-8).reverse().join("");
-  $("#adminBox").innerHTML='<h2>Admin</h2><p>'+t("total")+': <b>'+f.length+'</b> · '+t("nlCount")+': <b>'+n+'</b></p>'+rows+'<p><b>'+t("lastC")+'</b></p><ul>'+cm+'</ul><button class="btn alt" onclick="try{localStorage.removeItem(\'fb\');localStorage.removeItem(\'nl\')}catch(e){}showStats()">'+t("wipe")+'</button> <button class="btn" onclick="closeAdmin()">'+t("close")+'</button>';
+  $("#adminBox").innerHTML='<h2>Admin</h2><p>'+t("total")+': <b>'+f.length+'</b> · '+t("nlCount")+': <b>'+n+'</b></p>'+rows+'<p><b>'+t("lastC")+'</b></p><ul>'+cm+'</ul><button class="btn alt" onclick="try{localStorage.removeItem(\'fb\');localStorage.removeItem(\'nl\')}catch(e){}showStats()">'+t("wipe")+'</button> <button class="btn" onclick="closeAdmin()">'+t("close")+'</button>'+ver();
 }
 
 activity();loadShop();keepAwake();
