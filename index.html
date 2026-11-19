@@ -156,7 +156,7 @@ function render(){
   var h = "";
   if(V.n==="home"){
     h = '<h1>'+t("welcome")+'</h1><p class="mute">'+t("hSub")+'</p><div class="home-grid">'+
-      tile("","🔎",t("search"),t("searchS"),"go('search')")+tile("main","🧰",t("discover"),t("discoverS"),"go('cats')")+
+      tile("","🔎",t("search"),t("searchS"),"go('search')")+tile("","🧰",t("discover"),t("discoverS"),"go('cats')")+
       tile("","🧭",t("aisles"),t("aislesS"),"go('aisles')")+tile("","💬",t("fb"),t("fbS"),"startFb()")+'</div>';
   }else if(V.n==="cats"){
     h = '<h2>'+t("cats")+'</h2><div class="grid" style="margin-top:18px">'+CATS.map(function(c,i){return tile("",esc(c[0]),cat(i),PRODS.filter(function(p){return p[1]===i}).length+" "+t("items"),"go('list',{c:"+i+"})")}).join("")+'</div>';
