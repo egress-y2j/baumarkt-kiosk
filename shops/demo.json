@@ -4,207 +4,49 @@
  "accent": "#ffc400",
  "accentText": "#1f2a30",
  "categories": [
-  {
-   "name": "Saisonal",
-   "icon": "❄️"
-  },
-  {
-   "name": "Werkzeug",
-   "icon": "🔨"
-  },
-  {
-   "name": "Farben & Lacke",
-   "icon": "🎨"
-  },
-  {
-   "name": "Garten",
-   "icon": "🌱"
-  },
-  {
-   "name": "Elektro & Licht",
-   "icon": "💡"
-  },
-  {
-   "name": "Holz & Baustoffe",
-   "icon": "🪵"
-  },
-  {
-   "name": "Bad & Sanitär",
-   "icon": "🚿"
-  },
-  {
-   "name": "Aktionen",
-   "icon": "🏷️"
-  }
+  {"name":"Saisonal","icon":"❄️"},
+  {"name":"Werkzeug","icon":"🔨"},
+  {"name":"Farben & Lacke","icon":"🎨"},
+  {"name":"Garten","icon":"🌱"},
+  {"name":"Elektro & Licht","icon":"💡"},
+  {"name":"Holz & Baustoffe","icon":"🪵"},
+  {"name":"Bad & Sanitär","icon":"🚿"},
+  {"name":"Aktionen","icon":"🏷️"}
  ],
  "products": [
-  {
-   "name": "Akku-Bohrschrauber 18 V",
-   "category": "Werkzeug",
-   "price": "89,90",
-   "description": "Zwei Akkus, Ladegerät und Koffer inklusive.",
-   "aisle": "1"
-  },
-  {
-   "name": "Schlosserhammer 300 g",
-   "category": "Werkzeug",
-   "price": "12,50",
-   "description": "Eschenstiel, geschmiedeter Kopf.",
-   "aisle": "1"
-  },
-  {
-   "name": "Schrauben-Sortiment 200-teilig",
-   "category": "Werkzeug",
-   "price": "14,90",
-   "description": "Holzschrauben in sechs Größen.",
-   "aisle": "1"
-  },
-  {
-   "name": "Wandfarbe weiß 10 l",
-   "category": "Farben & Lacke",
-   "price": "39,90",
-   "description": "Matt, tropffrei, für Innenräume.",
-   "aisle": "2"
-  },
-  {
-   "name": "Holzlasur Eiche 2,5 l",
-   "category": "Farben & Lacke",
-   "price": "27,50",
-   "description": "Schützt Holz im Innen- und Außenbereich.",
-   "aisle": "2"
-  },
-  {
-   "name": "Malerrollen-Set, 5-teilig",
-   "category": "Farben & Lacke",
-   "price": "9,95",
-   "description": "Rolle, Wanne, Pinsel und Abdeckfolie.",
-   "aisle": "2"
-  },
-  {
-   "name": "Gartenschlauch 20 m",
-   "category": "Garten",
-   "price": "24,90",
-   "description": "Knickfest, mit Spritzpistole.",
-   "aisle": "3"
-  },
-  {
-   "name": "Blumenerde 40 l",
-   "category": "Garten",
-   "price": "6,99",
-   "description": "Torfreduziert, für Balkon und Beet.",
-   "aisle": "3"
-  },
-  {
-   "name": "Astschere",
-   "category": "Garten",
-   "price": "17,90",
-   "description": "Schneidet Äste bis 25 mm.",
-   "aisle": "3"
-  },
-  {
-   "name": "LED-Lampe E27, 4er-Pack",
-   "category": "Elektro & Licht",
-   "price": "8,99",
-   "description": "Warmweiß, sparsam und langlebig.",
-   "aisle": "4"
-  },
-  {
-   "name": "Steckdosenleiste 6-fach",
-   "category": "Elektro & Licht",
-   "price": "11,90",
-   "description": "Mit Überspannungsschutz und Schalter.",
-   "aisle": "4"
-  },
-  {
-   "name": "Kabeltrommel 25 m",
-   "category": "Elektro & Licht",
-   "price": "34,90",
-   "description": "Für den Außeneinsatz geeignet.",
-   "aisle": "4"
-  },
-  {
-   "name": "Konstruktionsholz 4 m",
-   "category": "Holz & Baustoffe",
-   "price": "9,50",
-   "description": "Fichte, gehobelt, 6 × 8 cm.",
-   "aisle": "5"
-  },
-  {
-   "name": "OSB-Platte 18 mm",
-   "category": "Holz & Baustoffe",
-   "price": "21,90",
-   "description": "Für Boden, Wand und Regalbau.",
-   "aisle": "5"
-  },
-  {
-   "name": "Holzleim 750 g",
-   "category": "Holz & Baustoffe",
-   "price": "7,49",
-   "description": "Wasserfest, für Innen und Außen.",
-   "aisle": "5"
-  },
-  {
-   "name": "Regenduschkopf",
-   "category": "Bad & Sanitär",
-   "price": "29,90",
-   "description": "Große Brause, kalkabweisend.",
-   "aisle": "6"
-  },
-  {
-   "name": "Sanitär-Silikon weiß",
-   "category": "Bad & Sanitär",
-   "price": "6,50",
-   "description": "Schimmelhemmend, 310 ml.",
-   "aisle": "6"
-  },
-  {
-   "name": "WC-Sitz mit Absenkautomatik",
-   "category": "Bad & Sanitär",
-   "price": "39,90",
-   "description": "Abnehmbar, leicht zu reinigen.",
-   "aisle": "6"
-  },
-  {
-   "name": "Streusalz 10 kg",
-   "category": "Saisonal",
-   "price": "9,90",
-   "description": "Taut Eis und Schnee auf Wegen und Einfahrten.",
-   "aisle": "7"
-  },
-  {
-   "name": "Schneeschaufel Aluminium",
-   "category": "Saisonal",
-   "price": "19,90",
-   "description": "Leicht, mit stabiler Kante.",
-   "aisle": "7"
-  },
-  {
-   "name": "LED-Lichterkette 100er",
-   "category": "Saisonal",
-   "price": "14,90",
-   "description": "Warmweiß, für innen und außen.",
-   "aisle": "7"
-  },
-  {
-   "name": "Wandfarbe weiß 5 l",
-   "category": "Aktionen",
-   "price": "14,99",
-   "description": "Aktionspreis, solange der Vorrat reicht.",
-   "aisle": "8"
-  },
-  {
-   "name": "Werkzeugkoffer 108-teilig",
-   "category": "Aktionen",
-   "price": "59,90",
-   "description": "Aktionspreis, gefüllter Koffer.",
-   "aisle": "8"
-  },
-  {
-   "name": "Gartenhandschuhe 3er-Set",
-   "category": "Aktionen",
-   "price": "7,99",
-   "description": "Aktionspreis, in drei Größen.",
-   "aisle": "8"
-  }
+  {"name":"Streusalz 10 kg","category":"Saisonal","price":"9,90","description":"Taut Eis und Schnee auf Wegen und Einfahrten.","aisle":"7","tags":["winter","eis","schnee","streuen"],"image":"streusalz-10-kg.svg"},
+  {"name":"Schneeschaufel Aluminium","category":"Saisonal","price":"19,90","description":"Leicht, mit stabiler Kante.","aisle":"7","tags":["winter","schnee","garten","schaufel"],"image":"schneeschaufel-aluminium.svg"},
+  {"name":"LED-Lichterkette 100er","category":"Saisonal","price":"14,90","description":"Warmweiß, für innen und außen.","aisle":"7","tags":["licht","led","weihnachten","deko","winter"],"image":"led-lichterkette-100er.svg"},
+  {"name":"Akku-Bohrschrauber 18 V","category":"Werkzeug","price":"89,90","description":"Zwei Akkus, Ladegerät und Koffer inklusive.","aisle":"1","tags":["bohren","schrauben","akku","bohrmaschine","heimwerken"],"image":"akku-bohrschrauber-18-v.svg"},
+  {"name":"Schlosserhammer 300 g","category":"Werkzeug","price":"12,50","description":"Eschenstiel, geschmiedeter Kopf.","aisle":"1","tags":["hammer","schlagen","nagel","heimwerken"],"image":"schlosserhammer-300-g.svg"},
+  {"name":"Schrauben-Sortiment 200-teilig","category":"Werkzeug","price":"14,90","description":"Holzschrauben in sechs Größen.","aisle":"1","tags":["schrauben","befestigung","holz","heimwerken"]},
+  {"name":"Wandfarbe weiß 10 l","category":"Farben & Lacke","price":"39,90","description":"Matt, tropffrei, für Innenräume.","aisle":"2","tags":["farbe","streichen","wand","renovieren","innen"],"image":"wandfarbe-weiss-10-l.svg"},
+  {"name":"Holzlasur Eiche 2,5 l","category":"Farben & Lacke","price":"27,50","description":"Schützt Holz im Innen- und Außenbereich.","aisle":"2","tags":["holz","streichen","schutz","lasur","außen"],"image":"holzlasur-eiche-2-5-l.svg"},
+  {"name":"Malerrollen-Set, 5-teilig","category":"Farben & Lacke","price":"9,95","description":"Rolle, Wanne, Pinsel und Abdeckfolie.","aisle":"2","tags":["streichen","farbe","renovieren","pinsel","wand"]},
+  {"name":"Gartenschlauch 20 m","category":"Garten","price":"24,90","description":"Knickfest, mit Spritzpistole.","aisle":"3","tags":["garten","wasser","bewässern","schlauch"],"image":"gartenschlauch-20-m.svg"},
+  {"name":"Blumenerde 40 l","category":"Garten","price":"6,99","description":"Torfreduziert, für Balkon und Beet.","aisle":"3","tags":["garten","pflanzen","erde","balkon"],"image":"blumenerde-40-l.svg"},
+  {"name":"Astschere","category":"Garten","price":"17,90","description":"Schneidet Äste bis 25 mm.","aisle":"3","tags":["garten","schneiden","pflanzen","schere"]},
+  {"name":"LED-Lampe E27, 4er-Pack","category":"Elektro & Licht","price":"8,99","description":"Warmweiß, sparsam und langlebig.","aisle":"4","tags":["licht","lampe","led","glühbirne"],"image":"led-lampe-e27-4er-pack.svg"},
+  {"name":"Steckdosenleiste 6-fach","category":"Elektro & Licht","price":"11,90","description":"Mit Überspannungsschutz und Schalter.","aisle":"4","tags":["strom","steckdose","kabel","elektro"],"image":"steckdosenleiste-6-fach.svg"},
+  {"name":"Kabeltrommel 25 m","category":"Elektro & Licht","price":"34,90","description":"Für den Außeneinsatz geeignet.","aisle":"4","tags":["strom","kabel","außen","verlängerung","elektro"]},
+  {"name":"Konstruktionsholz 4 m","category":"Holz & Baustoffe","price":"9,50","description":"Fichte, gehobelt, 6 × 8 cm.","aisle":"5","tags":["holz","bauen","balken","latte"],"image":"konstruktionsholz-4-m.svg"},
+  {"name":"OSB-Platte 18 mm","category":"Holz & Baustoffe","price":"21,90","description":"Für Boden, Wand und Regalbau.","aisle":"5","tags":["holz","bauen","platte","regal"],"image":"osb-platte-18-mm.svg"},
+  {"name":"Holzleim 750 g","category":"Holz & Baustoffe","price":"7,49","description":"Wasserfest, für Innen und Außen.","aisle":"5","tags":["holz","kleben","bauen","heimwerken"]},
+  {"name":"Regenduschkopf","category":"Bad & Sanitär","price":"29,90","description":"Große Brause, kalkabweisend.","aisle":"6","tags":["dusche","bad","wasser","sanitär"],"image":"regenduschkopf.svg"},
+  {"name":"Sanitär-Silikon weiß","category":"Bad & Sanitär","price":"6,50","description":"Schimmelhemmend, 310 ml.","aisle":"6","tags":["bad","abdichten","kleben","sanitär","silikon"],"image":"sanitaer-silikon-weiss.svg"},
+  {"name":"WC-Sitz mit Absenkautomatik","category":"Bad & Sanitär","price":"39,90","description":"Abnehmbar, leicht zu reinigen.","aisle":"6","tags":["bad","wc","toilette","sanitär"]},
+  {"name":"Wandfarbe weiß 5 l","category":"Aktionen","price":"14,99","description":"Aktionspreis, solange der Vorrat reicht.","aisle":"8","tags":["farbe","streichen","wand","renovieren","innen"],"image":"wandfarbe-weiss-5-l.svg"},
+  {"name":"Werkzeugkoffer 108-teilig","category":"Aktionen","price":"59,90","description":"Aktionspreis, gefüllter Koffer.","aisle":"8","tags":["werkzeug","schrauben","bohren","heimwerken"],"image":"werkzeugkoffer-108-teilig.svg"},
+  {"name":"Gartenhandschuhe 3er-Set","category":"Aktionen","price":"7,99","description":"Aktionspreis, in drei Größen.","aisle":"8","tags":["garten","schutz","handschuhe","pflanzen"],"image":"gartenhandschuhe-3er-set.svg"}
+ ],
+ "aisles": [
+  {"aisle":"1","description":"Nach dem Eingang links halten. Gang 1 ist der erste Gang auf der linken Seite.","image":"gang-1.svg"},
+  {"aisle":"2","description":"Vom Eingang geradeaus bis zur Hallenmitte. Gang 2 ist der zweite Gang links, gegenüber der Farbmischstation.","image":"gang-2.svg"},
+  {"aisle":"3","description":"Durch die große Glastür am Ende der Halle in den Gartenbereich.","image":"gang-3.svg"},
+  {"aisle":"4","description":"Geradeaus bis zu den Kassen. Gang 4 liegt dahinter auf der rechten Seite, beim Lichtstudio.","image":"gang-4.svg"},
+  {"aisle":"5","description":"Hinten in der Halle rechts. Der Zugang liegt neben der Holzzuschnitt-Station.","image":"gang-5.svg"},
+  {"aisle":"6","description":"Am rechten Hallenrand, direkt nach der Elektro-Abteilung.","image":"gang-6.svg"},
+  {"aisle":"7","description":"Direkt hinter dem Eingang auf der rechten Seite, auf der Saisonfläche.","image":"gang-7.svg"},
+  {"aisle":"8","description":"Im Mittelgang, direkt vor den Kassen.","image":"gang-8.svg"}
  ]
 }

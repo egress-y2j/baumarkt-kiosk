@@ -23,11 +23,13 @@ button.p{background:#ffc400;border-color:#ffc400;color:#1f2a30;font-weight:600}b
 <div><label for="ac">Akzentfarbe</label><input id="ac" type="color" value="#ffc400"></div>
 </div>
 <label for="f">Produktliste (CSV)</label><input id="f" type="file" accept=".csv,.txt">
+<label for="f2">Gänge mit Wegbeschreibung (optional, CSV mit den Spalten Gang;Beschreibung)</label><input id="f2" type="file" accept=".csv,.txt">
+<label for="f3">Bilddateien prüfen (optional): die verkleinerten Bilder auswählen, ob alle Namen aus „Bild“ vorhanden sind. Verkleinern geht mit <a href="bilder.html">bilder.html</a>.</label><input id="f3" type="file" accept="image/*" multiple>
 <div id="out"></div>
 <button class="p" id="dl" disabled>JSON herunterladen</button>
 <script>
 var $=function(i){return document.getElementById(i)},DATA=null;
-var AL={category:["kategorie","category","warengruppe"],name:["name","artikel","produkt","bezeichnung"],description:["beschreibung","description","text"],price:["preis","price"],aisle:["gang","aisle","regal"],icon:["icon","symbol"]};
+var AL={category:["kategorie","category","warengruppe"],name:["name","artikel","produkt","bezeichnung"],description:["beschreibung","description","text"],price:["preis","price"],aisle:["gang","aisle","regal"],icon:["icon","symbol"],tags:["tags","schlagworte","suchbegriffe"],image:["bild","foto","image","bilddatei"]};
 function esc(s){return String(s).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
 function parse(t){t=t.replace(/^\uFEFF/,"");var first=t.split(/\r?\n/)[0],d=";";[";",",","\t"].forEach(function(c){if(first.split(c).length>first.split(d).length)d=c});
   var rows=[],row=[],f="",q=false;
@@ -38,7 +40,7 @@ function parse(t){t=t.replace(/^\uFEFF/,"");var first=t.split(/\r?\n/)[0],d=";";
   if(f!==""||row.length){row.push(f);rows.push(row)}
   return rows.filter(function(r){return r.some(function(x){return x.trim()})})}
 function price(v){v=v.replace(/[€\s]/g,"");if(/^\d+([.,]\d{1,2})?$/.test(v)){var n=parseFloat(v.replace(",","."));return n.toFixed(2).replace(".",",")}return v}
-function build(text){
+function build(text,text2){
   var E=[],W=[],rows=parse(text);if(rows.length<2){return {E:["Die Datei enthält keine Produktzeilen."],W:[],D:null}}
   if(text.indexOf("\uFFFD")>-1)W.push("Sonderzeichen sind kaputt: in Excel als „CSV UTF-8“ speichern.");
   var head=rows[0].map(function(h){return h.trim().toLowerCase()}),ix={};
@@ -53,19 +55,35 @@ function build(text){
     var key=c+"|"+nm.toLowerCase();if(seen[key])W.push("Zeile "+line+": „"+nm+"“ kommt doppelt in „"+c+"“ vor");seen[key]=1;
     var ci=cats.findIndex(function(x){return x.name===c});if(ci<0){cats.push({name:c,icon:get(r,"icon")||"📦"});ci=cats.length-1}
     else if(!cats[ci].icon||cats[ci].icon==="📦"){var ic=get(r,"icon");if(ic)cats[ci].icon=ic}
-    prods.push({name:nm,category:c,price:pr,description:get(r,"description"),aisle:g})});
+    var tg=get(r,"tags").split(/[,|]/).map(function(x){return x.trim().toLowerCase()}).filter(function(x,i,a){return x&&a.indexOf(x)===i});
+    var o={name:nm,category:c,price:pr,description:get(r,"description"),aisle:g};if(tg.length)o.tags=tg;if(get(r,"image"))o.image=get(r,"image");prods.push(o)});
   if(cats.length>12)W.push(cats.length+" Kategorien sind viele für eine Kachelansicht.");
+  var ais=[];
+  if(text2){var ar=parse(text2),ah=(ar[0]||[]).map(function(h){return h.trim().toLowerCase()}),gi=ah.indexOf("gang"),di=ah.findIndex(function(h){return h==="beschreibung"||h==="wegbeschreibung"}),bi=ah.findIndex(function(h){return h==="bild"||h==="foto"||h==="image"});
+    if(gi<0||(di<0&&bi<0))E.push("Gänge-Datei: Die Spalte „Gang“ sowie „Beschreibung“ oder „Bild“ fehlt.");
+    else ar.slice(1).forEach(function(r){var g=(r[gi]||"").trim(),d=di<0?"":(r[di]||"").trim(),im=bi<0?"":(r[bi]||"").trim();if(g&&(d||im)){var o={aisle:g,description:d};if(im)o.image=im;ais.push(o)}});
+    ais.forEach(function(a){if(!prods.some(function(p){return p.aisle===a.aisle}))W.push("Gänge-Datei: Gang „"+a.aisle+"“ kommt bei keinem Produkt vor.")});
+    var have={},no=[];ais.forEach(function(a){have[a.aisle]=1});prods.forEach(function(p){if(!have[p.aisle]&&no.indexOf(p.aisle)<0)no.push(p.aisle)});
+    if(no.length)W.push("Ohne Gangbeschreibung: "+no.join(", "))}
+  var fl=$("f3").files;
+  if(fl&&fl.length){var have2={},used={};for(var q=0;q<fl.length;q++)have2[fl[q].name]=1;
+    prods.forEach(function(p){if(p.image){used[p.image]=1;if(!have2[p.image])W.push("Bild fehlt: "+p.image+" ("+p.name+")")}});
+    ais.forEach(function(a){if(a.image){used[a.image]=1;if(!have2[a.image])W.push("Bild fehlt: "+a.image+" (Gang "+a.aisle+")")}});
+    Object.keys(have2).forEach(function(n){if(!used[n])W.push("Bild wird nicht verwendet: "+n)})}
   var rk=function(n){n=n.toLowerCase();return n==="saisonal"?0:n==="aktionen"?2:1};cats=cats.map(function(c,i){return [c,i]}).sort(function(a,b){return rk(a[0].name)-rk(b[0].name)||a[1]-b[1]}).map(function(x){return x[0]});
   var hex=$("ac").value,l=(parseInt(hex.substr(1,2),16)*.299+parseInt(hex.substr(3,2),16)*.587+parseInt(hex.substr(5,2),16)*.114);
-  return {E:E,W:W,D:{name:$("nm").value.trim(),logo:$("lg").value.trim(),accent:hex,accentText:l>150?"#1f2a30":"#ffffff",categories:cats,products:prods}}}
-function run(){var f=$("f").files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){
-  var r=build(rd.result),id=$("id").value.trim(),h="";DATA=null;$("dl").disabled=true;
+  return {E:E,W:W,D:{name:$("nm").value.trim(),logo:$("lg").value.trim(),accent:hex,accentText:l>150?"#1f2a30":"#ffffff",categories:cats,products:prods,aisles:ais}}}
+function fmt(D){var L=function(a){return a.map(function(x){return "  "+JSON.stringify(x)}).join(",\n")};
+  return "{\n"+Object.keys(D).filter(function(k){return typeof D[k]!=="object"}).map(function(k){return ' "'+k+'": '+JSON.stringify(D[k])}).join(",\n")+',\n "categories": [\n'+L(D.categories)+'\n ],\n "products": [\n'+L(D.products)+'\n ],\n "aisles": [\n'+L(D.aisles||[])+'\n ]\n}\n'}
+function readTxt(f,cb){if(!f){cb("");return}var q=new FileReader();q.onload=function(){cb(q.result)};q.readAsText(f,"UTF-8")}
+function run(){var f=$("f").files[0];if(!f)return;readTxt(f,function(t1){readTxt($("f2").files[0],function(t2){
+  var r=build(t1,t2),id=$("id").value.trim(),h="";DATA=null;$("dl").disabled=true;
   if(!/^[a-z0-9-]+$/.test(id))r.E.push("Laden-Kennung: nur Kleinbuchstaben, Ziffern und Bindestrich.");
   r.E.forEach(function(x){h+='<p class="e">✖ '+esc(x)+'</p>'});r.W.forEach(function(x){h+='<p class="w">⚠ '+esc(x)+'</p>'});
-  if(!r.E.length&&r.D){DATA=r.D;$("dl").disabled=false;h='<p class="o">✔ '+r.D.products.length+' Produkte in '+r.D.categories.length+' Kategorien, '+new Set(r.D.products.map(function(p){return p.aisle})).size+' Gänge.</p>'+h+'<pre>'+esc(JSON.stringify(r.D,null,1).slice(0,1500))+' …</pre>'}
-  $("out").innerHTML=h};rd.readAsText(f,"UTF-8")}
-["f","id","nm","lg","ac"].forEach(function(i){$(i).addEventListener("change",run)});
+  if(!r.E.length&&r.D){DATA=r.D;$("dl").disabled=false;h='<p class="o">✔ '+r.D.products.length+' Produkte in '+r.D.categories.length+' Kategorien, '+new Set(r.D.products.map(function(p){return p.aisle})).size+' Gänge.</p>'+h+'<pre>'+esc(fmt(r.D).slice(0,1500))+' …</pre>'}
+  $("out").innerHTML=h})})}
+["f","f2","f3","id","nm","lg","ac"].forEach(function(i){$(i).addEventListener("change",run)});
 function save(name,txt,type){var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type:type}));a.download=name;a.click()}
-$("dl").onclick=function(){if(DATA)save($("id").value.trim()+".json",JSON.stringify(DATA,null,1),"application/json")};
-$("tpl").onclick=function(){save("vorlage.csv","\uFEFFKategorie;Name;Beschreibung;Preis;Gang;Icon\r\nWerkzeug;Hammer 300 g;Eschenstiel, geschmiedeter Kopf.;12,50;1;🔨\r\nGarten;Gartenschlauch 20 m;Knickfest, mit Spritzpistole.;24,90;3;🌱\r\n","text/csv")};
+$("dl").onclick=function(){if(DATA)save($("id").value.trim()+".json",fmt(DATA),"application/json")};
+$("tpl").onclick=function(){save("vorlage.csv","\uFEFFKategorie;Name;Beschreibung;Preis;Gang;Icon;Tags\r\nWerkzeug;Hammer 300 g;Eschenstiel, geschmiedeter Kopf.;12,50;1;🔨;nagel, schlagen, heimwerken\r\nGarten;Gartenschlauch 20 m;Knickfest, mit Spritzpistole.;24,90;3;🌱;wasser, bewässern\r\n","text/csv")};
 </script></body></html>

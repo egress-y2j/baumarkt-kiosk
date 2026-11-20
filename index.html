@@ -34,6 +34,19 @@ main{flex:1;overflow:auto;padding:28px 36px}
 .tile small{color:var(--mute);font-size:18px}
 .tile.main{background:var(--acc);color:var(--on-acc);border-color:var(--acc)}
 .tile.main small{color:var(--on-acc)}
+.pic{overflow:hidden}
+.pic img{width:100%;height:100%;object-fit:contain;background:#fff}
+.thumb{width:76px;height:76px;flex:none;border-radius:10px;background:var(--bg);display:grid;place-items:center;font-size:40px;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb.big{width:100%;height:110px;border-radius:8px}
+.gimg{display:block;max-width:100%;max-height:380px;margin-top:14px;border-radius:10px}
+.dir{background:var(--card);border:2px solid var(--line);border-left:8px solid var(--acc);border-radius:12px;padding:16px 22px;margin:16px 0 20px;font-size:22px;max-width:900px}
+main.prod{display:flex;flex-direction:column}
+.similar{margin-top:auto;padding-top:26px}
+.similar h3{font:700 28px "Barlow Condensed","Arial Narrow",Arial,sans-serif;margin:0 0 10px}
+.strip{display:flex;gap:14px;overflow-x:auto;padding-bottom:6px}
+.mini{flex:0 0 240px;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:12px 16px;text-align:left;display:flex;flex-direction:column;gap:4px;min-height:96px}
+.mini:active{border-color:var(--acc)}
 main.home{display:flex;flex-direction:column}
 .home-grid{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:22px}
 .home-grid .tile{min-height:0;justify-content:center;align-items:center;text-align:center;gap:14px}
@@ -82,7 +95,7 @@ textarea{min-height:150px;resize:none}
 
 <script>
 // Einstellungen (zum Testen kürzer setzen)
-var VERSION = "v7", IDLE_RESET = 45000, PIN = "1234";   // nach 45 s ohne Berührung zurück zur Startseite
+var VERSION = "v9", IDLE_RESET = 45000, PIN = "1234";   // nach 45 s ohne Berührung zurück zur Startseite
 
 var T = {
  de:{back:"Zurück",home:"Start",welcome:"Wie können wir helfen?",hSub:"Tippen Sie auf eine Kachel.",
@@ -91,7 +104,7 @@ var T = {
   cats:"Kategorien",aisle:"Gang",price:"Preis",findIn:"Zu finden in",searchPh:"Zum Beispiel „Bohrschrauber“",
   none:"Nichts gefunden. Bitte fragen Sie einen Mitarbeiter.",items:"Artikel",
   q1:"Wie zufrieden sind Sie insgesamt mit Ihrem Besuch?",q2:"Wie zufrieden sind Sie mit unserer Produktauswahl?",q3:"Wie zufrieden sind Sie mit dem Service?",
-  q:"Frage",of:"von",good:"Gut",ok:"Geht so",bad:"Schlecht",cph:"Kommentar (freiwillig), z. B. Lob oder Wunsch",cnote:"Bitte keine persönlichen Daten eintragen.",lblA:"Besuch",lblP:"Auswahl",lblS:"Service",lblC:"Sonstiges",
+  q:"Frage",of:"von",good:"Gut",ok:"Geht so",bad:"Schlecht",similar:"Ähnliche Produkte",how:"So kommen Sie hin",cph:"Kommentar (freiwillig), z. B. Lob oder Wunsch",cnote:"Bitte keine persönlichen Daten eintragen.",lblA:"Besuch",lblP:"Auswahl",lblS:"Service",lblC:"Sonstiges",
   commentT:"Möchten Sie uns noch etwas mitteilen?",commentP:"Ihre Anmerkung (freiwillig)",next:"Weiter",skip:"Überspringen",
   nlT:"Newsletter erhalten?",nlS:"Freiwillig. Wir informieren Sie über Angebote.",email:"E-Mail-Adresse",
   consent:"Ich willige ein, den Newsletter per E-Mail zu erhalten. Ich kann die Einwilligung jederzeit widerrufen.",
@@ -106,7 +119,7 @@ var T = {
   cats:"Categories",aisle:"Aisle",price:"Price",findIn:"Find it in",searchPh:"For example “drill”",
   none:"Nothing found. Please ask a team member.",items:"items",
   q1:"How satisfied are you with your visit overall?",q2:"How satisfied are you with our product range?",q3:"How satisfied are you with our service?",
-  q:"Question",of:"of",good:"Good",ok:"So-so",bad:"Poor",cph:"Comment (optional), e.g. praise or a wish",cnote:"Please do not enter personal data.",lblA:"Visit",lblP:"Range",lblS:"Service",lblC:"Other",
+  q:"Question",of:"of",good:"Good",ok:"So-so",bad:"Poor",similar:"Similar products",how:"How to get there",cph:"Comment (optional), e.g. praise or a wish",cnote:"Please do not enter personal data.",lblA:"Visit",lblP:"Range",lblS:"Service",lblC:"Other",
   commentT:"Anything else you would like to tell us?",commentP:"Your comment (optional)",next:"Next",skip:"Skip",
   nlT:"Receive our newsletter?",nlS:"Optional. We will tell you about offers.",email:"Email address",
   consent:"I agree to receive the newsletter by email. I can withdraw my consent at any time.",
@@ -118,7 +131,7 @@ var T = {
 };
 
 // Daten kommen aus shops/<id>.json (siehe loadShop)
-var CATS = [], PRODS = [], GANGS = [], SHOP = {}, SID = "demo";
+var CATS = [], PRODS = [], GANGS = [], AIS = {}, HASIMG = false, SHOP = {}, SID = "demo";
 
 var L = "de", V = {n:"home"}, FB = {}, tReset, tThanks;
 var $ = function(s){return document.querySelector(s)}, M = $("#main");
@@ -127,14 +140,29 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp
 function cat(i){return esc(CATS[i][L==="de"?1:2])}
 function store(k,v){try{var a=JSON.parse(localStorage.getItem(k)||"[]");if(v){a.push(v);localStorage.setItem(k,JSON.stringify(a))}return a}catch(e){return []}}
 
+function img(n){return encodeURI(/^(https?:)?\/\//.test(n)||n.indexOf("/")>-1?n:"images/"+SID+"/"+n)}
+function picHtml(p){var ic=esc(CATS[p[1]][0]);if(!p[6])return "<span>"+ic+"</span>";
+  return '<img src="'+esc(img(p[6]))+'" alt="" onerror="this.nextSibling.hidden=false;this.remove()"><span hidden>'+ic+'</span>'}
+function thumb(p,big){return HASIMG?'<span class="thumb'+(big?' big':'')+'">'+picHtml(p)+'</span>':""}
+function aisleBox(g){var a=AIS[g];if(!a||(!a.d&&!a.i))return "";
+  return '<div class="dir">'+(a.d?'<b>'+t("how")+'</b><br>'+esc(a.d):'')+(a.i?'<img class="gimg" src="'+esc(img(a.i))+'" alt="" onerror="this.remove()">':'')+'</div>'}
+function preload(){var u=[],k=0;PRODS.forEach(function(p){if(p[6])u.push(img(p[6]))});Object.keys(AIS).forEach(function(g){if(AIS[g].i)u.push(img(AIS[g].i))});
+  function nx(){if(k>=u.length)return;var im=new Image();im.onload=im.onerror=nx;im.src=u[k++]}
+  setTimeout(function(){nx();nx();nx()},1500)}
+function tagList(v){if(typeof v==="string")v=v.split(/[,;|]/);return (v||[]).map(function(x){return String(x).trim().toLowerCase()}).filter(function(x,i,a){return x&&a.indexOf(x)===i})}
+function similarBar(i){var p=PRODS[i],r=[];if(!p[5].length)return "";
+  PRODS.forEach(function(q,j){if(j===i)return;var n=q[5].filter(function(x){return p[5].indexOf(x)>-1}).length;if(n)r.push([j,n])});
+  r.sort(function(a,b){return b[1]-a[1]||a[0]-b[0]});r=r.slice(0,8);if(!r.length)return "";
+  return '<div class="similar"><h3>'+t("similar")+'</h3><div class="strip">'+r.map(function(x){var q=PRODS[x[0]];return '<button class="mini" onclick="go(\'prod\',{i:'+x[0]+'})">'+thumb(q,1)+'<b>'+esc(q[0])+'</b><span class="mute">'+t("aisle")+" "+esc(q[4])+" · "+esc(q[2])+' €</span></button>'}).join("")+'</div></div>'}
 function gCats(g){var o=[];PRODS.forEach(function(p){var n=CATS[p[1]][1];if(p[4]===g&&o.indexOf(n)<0)o.push(n)});return o.join(" · ")}
 function gOfCat(c){var o=[];PRODS.forEach(function(p){if(p[1]===c&&o.indexOf(p[4])<0)o.push(p[4])});return o.join(", ")}
 function applyShop(d){
   SHOP=d;var names=d.categories.map(function(c){return c.name});
   CATS=d.categories.map(function(c){return [c.icon||"📦",c.name,c.name]});
-  PRODS=d.products.map(function(p){return [p.name,names.indexOf(p.category),p.price||"",p.description||"",String(p.aisle||"")]}).filter(function(p){return p[1]>-1});
+  PRODS=d.products.map(function(p){return [p.name,names.indexOf(p.category),p.price||"",p.description||"",String(p.aisle||""),tagList(p.tags),String(p.image||"")]}).filter(function(p){return p[1]>-1});
   GANGS=[];PRODS.forEach(function(p){if(GANGS.indexOf(p[4])<0)GANGS.push(p[4])});
   GANGS.sort(function(a,b){return a.localeCompare(b,"de",{numeric:true})});
+  AIS={};(d.aisles||[]).forEach(function(a){AIS[String(a.aisle)]={d:a.description||"",i:a.image||""}});HASIMG=PRODS.some(function(p){return p[6]});preload();
   if(d.accent){var r=document.documentElement.style;r.setProperty("--acc",d.accent);r.setProperty("--on-acc",d.accentText||"#1f2a30")}
   $("#logo").innerHTML='<div class="mark">'+esc(d.logo||"🛒")+'</div>'+esc(d.name||"Kiosk");
   document.title=(d.name||"Kiosk")+" – Kiosk";
@@ -148,7 +176,7 @@ function loadShop(){
 }
 function go(n,p){clearTimeout(tThanks);V=Object.assign({n:n},p||{});render();M.scrollTop=0}
 function tile(cls,ic,title,sub,act){return '<button class="tile '+cls+'" onclick="'+act+'"><span class="ic">'+ic+'</span><span><b>'+title+'</b><br><small>'+sub+'</small></span></button>'}
-function prodRow(i){var p=PRODS[i];return '<button class="row" onclick="go(\'prod\',{i:'+i+'})"><span><b>'+esc(p[0])+'</b><br><span class="mute">'+esc(p[3])+'</span></span><span class="price">'+esc(p[2])+' €</span></button>'}
+function prodRow(i){var p=PRODS[i];return '<button class="row" onclick="go(\'prod\',{i:'+i+'})">'+thumb(p)+'<span style="flex:1"><b>'+esc(p[0])+'</b><br><span class="mute">'+esc(p[3])+'</span></span><span class="price">'+esc(p[2])+' €</span></button>'}
 
 function render(){
   $("#back").hidden = V.n==="home"; $("#back").textContent = "← "+t("back");
@@ -162,10 +190,10 @@ function render(){
     h = '<h2>'+t("cats")+'</h2><div class="grid" style="margin-top:18px">'+CATS.map(function(c,i){return tile("",esc(c[0]),cat(i),PRODS.filter(function(p){return p[1]===i}).length+" "+t("items"),"go('list',{c:"+i+"})")}).join("")+'</div>';
   }else if(V.n==="list"){
     var byG = V.g!==undefined, ttl = byG?esc(t("aisle")+" "+GANGS[V.g]):cat(V.c);
-    h = '<h2>'+ttl+'</h2><p class="mute">'+(byG?esc(gCats(GANGS[V.g])):esc(t("aisle")+" "+gOfCat(V.c)))+'</p>'+PRODS.map(function(p,i){return (byG?p[4]===GANGS[V.g]:p[1]===V.c)?prodRow(i):""}).join("");
+    h = '<h2>'+ttl+'</h2><p class="mute">'+(byG?esc(gCats(GANGS[V.g])):esc(t("aisle")+" "+gOfCat(V.c)))+'</p>'+(byG?aisleBox(GANGS[V.g]):'')+PRODS.map(function(p,i){return (byG?p[4]===GANGS[V.g]:p[1]===V.c)?prodRow(i):""}).join("");
   }else if(V.n==="prod"){
     var p = PRODS[V.i];
-    h = '<div class="detail"><div class="pic">'+esc(CATS[p[1]][0])+'</div><div><h1>'+esc(p[0])+'</h1><p>'+esc(p[3])+'</p><div class="big"><span class="gang">'+t("aisle")+" "+esc(p[4])+'</span><span>'+t("findIn")+" "+cat(p[1])+'</span></div><p class="price" style="font-size:34px;margin:0">'+esc(p[2])+' €</p></div></div>';
+    h = '<div class="detail"><div class="pic">'+picHtml(p)+'</div><div><h1>'+esc(p[0])+'</h1><p>'+esc(p[3])+'</p><div class="big"><span class="gang">'+t("aisle")+" "+esc(p[4])+'</span><span>'+t("findIn")+" "+cat(p[1])+'</span></div><p class="price" style="font-size:34px;margin:0">'+esc(p[2])+' €</p></div></div>'+similarBar(V.i);
   }else if(V.n==="search"){
     h = '<h2>'+t("search")+'</h2><div style="margin:16px 0"><input type="search" id="q" placeholder="'+t("searchPh")+'" autocomplete="off" oninput="doSearch()"></div><div id="res"></div>';
   }else if(V.n==="aisles"){
@@ -191,12 +219,12 @@ function render(){
       tThanks = setTimeout(function(){go("home")},6000);
     }
   }
-  M.className = V.n==="home"?"home":""; M.innerHTML = h;
+  M.className = V.n==="home"?"home":V.n==="prod"?"prod":""; M.innerHTML = h;
   if(V.n==="search"){doSearch()}
 }
 function doSearch(){
   var q = ($("#q")?$("#q").value:"").trim().toLowerCase(), r = $("#res");
-  var hits = PRODS.map(function(p,i){return i}).filter(function(i){var p=PRODS[i];return !q||(p[0]+" "+p[3]+" "+CATS[p[1]][1]).toLowerCase().indexOf(q)>-1});
+  var hits = PRODS.map(function(p,i){return i}).filter(function(i){var p=PRODS[i];return !q||(p[0]+" "+p[3]+" "+CATS[p[1]][1]+" "+p[5].join(" ")).toLowerCase().indexOf(q)>-1});
   r.innerHTML = hits.length?hits.map(prodRow).join(""):'<p class="mute">'+t("none")+'</p>';
 }
 function startFb(){FB={};go("fb",{s:1})}
