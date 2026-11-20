@@ -29,7 +29,7 @@ button.p{background:#ffc400;border-color:#ffc400;color:#1f2a30;font-weight:600}b
 <button class="p" id="dl" disabled>JSON herunterladen</button>
 <script>
 var $=function(i){return document.getElementById(i)},DATA=null;
-var AL={category:["kategorie","category","warengruppe"],name:["name","artikel","produkt","bezeichnung"],description:["beschreibung","description","text"],price:["preis","price"],aisle:["gang","aisle","regal"],icon:["icon","symbol"],tags:["tags","schlagworte","suchbegriffe"],image:["bild","foto","image","bilddatei"],longdesc:["langbeschreibung","produktbeschreibung","details","longdescription"]};
+var AL={category:["kategorie","category","warengruppe"],name:["name","artikel","produkt","bezeichnung"],description:["beschreibung","description","text"],price:["preis","price"],aisle:["gang","aisle","regal"],icon:["icon","symbol"],tags:["tags","schlagworte","suchbegriffe"],image:["bild","foto","image","bilddatei"],longdesc:["langbeschreibung","produktbeschreibung","details","longdescription"],nameEn:["name (en)","name_en","name en"],descEn:["beschreibung (en)","beschreibung_en","description (en)"],longEn:["langbeschreibung (en)","langbeschreibung_en"],catEn:["kategorie (en)","kategorie_en","category (en)"],tagsEn:["tags (en)","tags_en"]};
 function esc(s){return String(s).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
 function parse(t){t=t.replace(/^\uFEFF/,"");var first=t.split(/\r?\n/)[0],d=";";[";",",","\t"].forEach(function(c){if(first.split(c).length>first.split(d).length)d=c});
   var rows=[],row=[],f="",q=false;
@@ -53,15 +53,17 @@ function build(text,text2){
     if(miss.length){E.push("Zeile "+line+": fehlt "+miss.join(", "));return}
     if(!/^\d+([.,]\d{2})?$/.test(pr))W.push("Zeile "+line+": Preis „"+pr+"“ ungewöhnlich");
     var key=c+"|"+nm.toLowerCase();if(seen[key])W.push("Zeile "+line+": „"+nm+"“ kommt doppelt in „"+c+"“ vor");seen[key]=1;
-    var ci=cats.findIndex(function(x){return x.name===c});if(ci<0){cats.push({name:c,icon:get(r,"icon")||"📦"});ci=cats.length-1}
-    else if(!cats[ci].icon||cats[ci].icon==="📦"){var ic=get(r,"icon");if(ic)cats[ci].icon=ic}
+    var cl=c.split("|").map(function(x){return x.trim()}).filter(Boolean),cle=get(r,"catEn").split("|").map(function(x){return x.trim()});
+    cl.forEach(function(cn,k){var ci=cats.findIndex(function(x){return x.name===cn});if(ci<0){cats.push({name:cn,icon:(k===0&&get(r,"icon"))||"📦"});ci=cats.length-1}
+      else if(k===0&&get(r,"icon")&&(!cats[ci].icon||cats[ci].icon==="📦"))cats[ci].icon=get(r,"icon");
+      if(cle[k]&&!cats[ci].name_en)cats[ci].name_en=cle[k]});
     var tg=get(r,"tags").split(/[,|]/).map(function(x){return x.trim().toLowerCase()}).filter(function(x,i,a){return x&&a.indexOf(x)===i});
-    var o={name:nm,category:c,price:pr,description:get(r,"description"),aisle:g};if(tg.length)o.tags=tg;if(get(r,"image"))o.image=get(r,"image");if(get(r,"longdesc"))o.longDescription=get(r,"longdesc");prods.push(o)});
+    var o={name:nm,category:cl.length>1?cl:cl[0],price:pr,description:get(r,"description"),aisle:g};if(tg.length)o.tags=tg;if(get(r,"image"))o.image=get(r,"image");if(get(r,"longdesc"))o.longDescription=get(r,"longdesc");if(get(r,"nameEn"))o.name_en=get(r,"nameEn");if(get(r,"descEn"))o.description_en=get(r,"descEn");if(get(r,"longEn"))o.longDescription_en=get(r,"longEn");var te=get(r,"tagsEn").split(/[,|]/).map(function(x){return x.trim().toLowerCase()}).filter(function(x,i,a){return x&&a.indexOf(x)===i});if(te.length)o.tags_en=te;prods.push(o)});
   if(cats.length>12)W.push(cats.length+" Kategorien sind viele für eine Kachelansicht.");
   var ais=[];
-  if(text2){var ar=parse(text2),ah=(ar[0]||[]).map(function(h){return h.trim().toLowerCase()}),gi=ah.indexOf("gang"),di=ah.findIndex(function(h){return h==="beschreibung"||h==="wegbeschreibung"}),bi=ah.findIndex(function(h){return h==="bild"||h==="foto"||h==="image"});
+  if(text2){var ar=parse(text2),ah=(ar[0]||[]).map(function(h){return h.trim().toLowerCase()}),gi=ah.indexOf("gang"),di=ah.findIndex(function(h){return h==="beschreibung"||h==="wegbeschreibung"}),bi=ah.findIndex(function(h){return h==="bild"||h==="foto"||h==="image"}),ei=ah.findIndex(function(h){return h==="beschreibung (en)"||h==="beschreibung_en"||h==="description (en)"});
     if(gi<0||(di<0&&bi<0))E.push("Gänge-Datei: Die Spalte „Gang“ sowie „Beschreibung“ oder „Bild“ fehlt.");
-    else ar.slice(1).forEach(function(r){var g=(r[gi]||"").trim(),d=di<0?"":(r[di]||"").trim(),im=bi<0?"":(r[bi]||"").trim();if(g&&(d||im)){var o={aisle:g,description:d};if(im)o.image=im;ais.push(o)}});
+    else ar.slice(1).forEach(function(r){var g=(r[gi]||"").trim(),d=di<0?"":(r[di]||"").trim(),im=bi<0?"":(r[bi]||"").trim(),en=ei<0?"":(r[ei]||"").trim();if(g&&(d||im)){var o={aisle:g,description:d};if(im)o.image=im;if(en)o.description_en=en;ais.push(o)}});
     ais.forEach(function(a){if(!prods.some(function(p){return p.aisle===a.aisle}))W.push("Gänge-Datei: Gang „"+a.aisle+"“ kommt bei keinem Produkt vor.")});
     var have={},no=[];ais.forEach(function(a){have[a.aisle]=1});prods.forEach(function(p){if(!have[p.aisle]&&no.indexOf(p.aisle)<0)no.push(p.aisle)});
     if(no.length)W.push("Ohne Gangbeschreibung: "+no.join(", "))}

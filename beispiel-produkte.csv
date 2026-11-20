@@ -1,34 +1,43 @@
-﻿Kategorie;Name;Beschreibung;Preis;Gang;Icon;Tags;Bild;Langbeschreibung
-"Saisonal";"Streusalz 10 kg";"Taut Eis und Schnee auf Wegen und Einfahrten.";"9,90";"7";"❄️";"winter, eis, schnee, streuen";"streusalz-10-kg.svg";"Taut Eis und Schnee auf Wegen, Treppen und Einfahrten.
-Nicht auf Pflanzenbeeten verwenden und nach Möglichkeit sparsam dosieren."
-"Saisonal";"Schneeschaufel Aluminium";"Leicht, mit stabiler Kante.";"19,90";"7";"❄️";"winter, schnee, garten, schaufel";"schneeschaufel-aluminium.svg";""
-"Saisonal";"LED-Lichterkette 100er";"Warmweiß, für innen und außen.";"14,90";"7";"❄️";"licht, led, weihnachten, deko, winter";"led-lichterkette-100er.svg";""
+﻿Kategorie;Name;Beschreibung;Preis;Gang;Icon;Tags;Bild;Langbeschreibung;Name (EN);Beschreibung (EN);Langbeschreibung (EN);Kategorie (EN);Tags (EN)
+"Saisonal | Garten";"Streusalz 10 kg";"Taut Eis und Schnee auf Wegen und Einfahrten.";"9,90";"7";"❄️";"winter, eis, schnee, streuen";"streusalz-10-kg.svg";"Taut Eis und Schnee auf Wegen, Treppen und Einfahrten.
+Nicht auf Pflanzenbeeten verwenden und nach Möglichkeit sparsam dosieren.";"Road salt 10 kg";"Melts ice and snow on paths and driveways.";"Melts ice and snow on paths, steps and driveways.
+Do not use on plant beds and dose sparingly where possible.";"Seasonal | Garden";"winter, ice, snow, grit"
+"Saisonal | Garten";"Schneeschaufel Aluminium";"Leicht, mit stabiler Kante.";"19,90";"7";"❄️";"winter, schnee, garten, schaufel";"schneeschaufel-aluminium.svg";"";"Aluminium snow shovel";"Lightweight, with a sturdy edge.";"";"Seasonal | Garden";"winter, snow, garden, shovel"
+"Saisonal | Elektro & Licht";"LED-Lichterkette 100er";"Warmweiß, für innen und außen.";"14,90";"7";"❄️";"licht, led, weihnachten, deko, winter";"led-lichterkette-100er.svg";"";"LED string lights, 100 bulbs";"Warm white, for indoor and outdoor use.";"";"Seasonal | Electrical & Lighting";"light, led, christmas, decoration, winter"
 "Werkzeug";"Akku-Bohrschrauber 18 V";"Zwei Akkus, Ladegerät und Koffer inklusive.";"89,90";"1";"🔨";"bohren, schrauben, akku, bohrmaschine, heimwerken";"akku-bohrschrauber-18-v.svg";"Der Akku-Bohrschrauber eignet sich zum Bohren in Holz und Metall sowie zum Eindrehen von Schrauben.
 Im Koffer liegen zwei Akkus und ein Ladegerät, so kannst du ohne Pause weiterarbeiten.
-Ein Drehmoment-Ring schützt empfindliche Materialien."
+Ein Drehmoment-Ring schützt empfindliche Materialien.";"Cordless drill driver 18 V";"Two batteries, charger and case included.";"The cordless drill driver is suitable for drilling in wood and metal and for driving screws.
+The case holds two batteries and a charger, so you can keep working without a break.
+A torque ring protects delicate materials.";"Tools";"drill, drilling, screws, cordless, battery, diy"
 "Werkzeug";"Schlosserhammer 300 g";"Eschenstiel, geschmiedeter Kopf.";"12,50";"1";"🔨";"hammer, schlagen, nagel, heimwerken";"schlosserhammer-300-g.svg";"Ein Hammer für Metallarbeiten, Meißeln und feine Schlagarbeiten.
-Der geschmiedete Kopf ist gehärtet, der Eschenstiel dämpft Schläge und liegt gut in der Hand."
-"Werkzeug";"Schrauben-Sortiment 200-teilig";"Holzschrauben in sechs Größen.";"14,90";"1";"🔨";"schrauben, befestigung, holz, heimwerken";"";""
+Der geschmiedete Kopf ist gehärtet, der Eschenstiel dämpft Schläge und liegt gut in der Hand.";"Locksmith's hammer 300 g";"Ash handle, forged head.";"A hammer for metalwork, chiselling and fine striking jobs.
+The forged head is hardened; the ash handle absorbs shocks and sits well in the hand.";"Tools";"hammer, striking, nail, diy"
+"Werkzeug";"Schrauben-Sortiment 200-teilig";"Holzschrauben in sechs Größen.";"14,90";"1";"🔨";"schrauben, befestigung, holz, heimwerken";"";"";"Screw assortment, 200 pieces";"Wood screws in six sizes.";"";"Tools";"screws, fasteners, wood, diy"
 "Farben & Lacke";"Wandfarbe weiß 10 l";"Matt, tropffrei, für Innenräume.";"39,90";"2";"🎨";"farbe, streichen, wand, renovieren, innen";"wandfarbe-weiss-10-l.svg";"Matte Innenfarbe für Wände und Decken in Wohnräumen.
-Die Farbe ist tropffrei und deckt in der Regel mit zwei Anstrichen. Vor dem Streichen Untergrund trocken und sauber halten, Boden abdecken."
-"Farben & Lacke";"Holzlasur Eiche 2,5 l";"Schützt Holz im Innen- und Außenbereich.";"27,50";"2";"🎨";"holz, streichen, schutz, lasur, außen";"holzlasur-eiche-2-5-l.svg";""
-"Farben & Lacke";"Malerrollen-Set, 5-teilig";"Rolle, Wanne, Pinsel und Abdeckfolie.";"9,95";"2";"🎨";"streichen, farbe, renovieren, pinsel, wand";"";""
+Die Farbe ist tropffrei und deckt in der Regel mit zwei Anstrichen. Vor dem Streichen Untergrund trocken und sauber halten, Boden abdecken.";"White wall paint 10 l";"Matt, drip-free, for interior rooms.";"Matt interior paint for walls and ceilings in living spaces.
+The paint is drip-free and usually covers in two coats. Keep the surface dry and clean before painting and cover the floor.";"Paint & Varnish";"paint, painting, wall, renovation, interior"
+"Farben & Lacke";"Holzlasur Eiche 2,5 l";"Schützt Holz im Innen- und Außenbereich.";"27,50";"2";"🎨";"holz, streichen, schutz, lasur, außen";"holzlasur-eiche-2-5-l.svg";"";"Wood stain oak 2.5 l";"Protects wood indoors and outdoors.";"";"Paint & Varnish";"wood, painting, protection, stain, outdoor"
+"Farben & Lacke";"Malerrollen-Set, 5-teilig";"Rolle, Wanne, Pinsel und Abdeckfolie.";"9,95";"2";"🎨";"streichen, farbe, renovieren, pinsel, wand";"";"";"Paint roller set, 5 pieces";"Roller, tray, brush and dust sheet.";"";"Paint & Varnish";"painting, paint, renovation, brush, wall"
 "Garten";"Gartenschlauch 20 m";"Knickfest, mit Spritzpistole.";"24,90";"3";"🌱";"garten, wasser, bewässern, schlauch";"gartenschlauch-20-m.svg";"Der Schlauch ist knickfest und bleibt auch bei Kälte flexibel.
-Die mitgelieferte Spritzpistole hat mehrere Strahlarten für Beet, Rasen und Terrasse."
-"Garten";"Blumenerde 40 l";"Torfreduziert, für Balkon und Beet.";"6,99";"3";"🌱";"garten, pflanzen, erde, balkon";"blumenerde-40-l.svg";""
-"Garten";"Astschere";"Schneidet Äste bis 25 mm.";"17,90";"3";"🌱";"garten, schneiden, pflanzen, schere";"";""
+Die mitgelieferte Spritzpistole hat mehrere Strahlarten für Beet, Rasen und Terrasse.";"Garden hose 20 m";"Kink-resistant, with spray gun.";"The hose is kink-resistant and stays flexible even in cold weather.
+The included spray gun has several spray patterns for beds, lawn and terrace.";"Garden";"garden, water, watering, hose"
+"Garten";"Blumenerde 40 l";"Torfreduziert, für Balkon und Beet.";"6,99";"3";"🌱";"garten, pflanzen, erde, balkon";"blumenerde-40-l.svg";"";"Potting soil 40 l";"Reduced peat, for balcony and beds.";"";"Garden";"garden, plants, soil, balcony"
+"Garten";"Astschere";"Schneidet Äste bis 25 mm.";"17,90";"3";"🌱";"garten, schneiden, pflanzen, schere";"";"";"Pruning shears";"Cuts branches up to 25 mm.";"";"Garden";"garden, cutting, plants, shears"
 "Elektro & Licht";"LED-Lampe E27, 4er-Pack";"Warmweiß, sparsam und langlebig.";"8,99";"4";"💡";"licht, lampe, led, glühbirne";"led-lampe-e27-4er-pack.svg";"Vier warmweiße LED-Lampen für Fassungen mit E27-Gewinde.
-Sie brauchen deutlich weniger Strom als klassische Glühlampen und halten sehr lange."
-"Elektro & Licht";"Steckdosenleiste 6-fach";"Mit Überspannungsschutz und Schalter.";"11,90";"4";"💡";"strom, steckdose, kabel, elektro";"steckdosenleiste-6-fach.svg";""
-"Elektro & Licht";"Kabeltrommel 25 m";"Für den Außeneinsatz geeignet.";"34,90";"4";"💡";"strom, kabel, außen, verlängerung, elektro";"";""
+Sie brauchen deutlich weniger Strom als klassische Glühlampen und halten sehr lange.";"LED bulb E27, 4-pack";"Warm white, efficient and long-lasting.";"Four warm-white LED bulbs for E27 sockets.
+They use far less power than traditional bulbs and last a very long time.";"Electrical & Lighting";"light, lamp, led, bulb"
+"Elektro & Licht";"Steckdosenleiste 6-fach";"Mit Überspannungsschutz und Schalter.";"11,90";"4";"💡";"strom, steckdose, kabel, elektro";"steckdosenleiste-6-fach.svg";"";"6-way power strip";"With surge protection and switch.";"";"Electrical & Lighting";"power, socket, cable, electrical"
+"Elektro & Licht";"Kabeltrommel 25 m";"Für den Außeneinsatz geeignet.";"34,90";"4";"💡";"strom, kabel, außen, verlängerung, elektro";"";"";"Cable reel 25 m";"Suitable for outdoor use.";"";"Electrical & Lighting";"power, cable, outdoor, extension, electrical"
 "Holz & Baustoffe";"Konstruktionsholz 4 m";"Fichte, gehobelt, 6 × 8 cm.";"9,50";"5";"🪵";"holz, bauen, balken, latte";"konstruktionsholz-4-m.svg";"Gehobeltes Fichtenholz für Unterkonstruktionen, Regale und kleine Bauprojekte.
-Bei Lagerung im Freien bitte vor Feuchtigkeit schützen."
-"Holz & Baustoffe";"OSB-Platte 18 mm";"Für Boden, Wand und Regalbau.";"21,90";"5";"🪵";"holz, bauen, platte, regal";"osb-platte-18-mm.svg";""
-"Holz & Baustoffe";"Holzleim 750 g";"Wasserfest, für Innen und Außen.";"7,49";"5";"🪵";"holz, kleben, bauen, heimwerken";"";""
-"Bad & Sanitär";"Regenduschkopf";"Große Brause, kalkabweisend.";"29,90";"6";"🚿";"dusche, bad, wasser, sanitär";"regenduschkopf.svg";""
-"Bad & Sanitär";"Sanitär-Silikon weiß";"Schimmelhemmend, 310 ml.";"6,50";"6";"🚿";"bad, abdichten, kleben, sanitär, silikon";"sanitaer-silikon-weiss.svg";""
-"Bad & Sanitär";"WC-Sitz mit Absenkautomatik";"Abnehmbar, leicht zu reinigen.";"39,90";"6";"🚿";"bad, wc, toilette, sanitär";"";""
-"Aktionen";"Wandfarbe weiß 5 l";"Aktionspreis, solange der Vorrat reicht.";"14,99";"8";"🏷️";"farbe, streichen, wand, renovieren, innen";"wandfarbe-weiss-5-l.svg";""
+Bei Lagerung im Freien bitte vor Feuchtigkeit schützen.";"Construction timber 4 m";"Spruce, planed, 6 × 8 cm.";"Planed spruce for sub-structures, shelves and small building projects.
+When stored outdoors, please protect it from moisture.";"Timber & Building Materials";"wood, building, beam, batten"
+"Holz & Baustoffe";"OSB-Platte 18 mm";"Für Boden, Wand und Regalbau.";"21,90";"5";"🪵";"holz, bauen, platte, regal";"osb-platte-18-mm.svg";"";"OSB board 18 mm";"For floors, walls and shelving.";"";"Timber & Building Materials";"wood, building, board, shelf"
+"Holz & Baustoffe";"Holzleim 750 g";"Wasserfest, für Innen und Außen.";"7,49";"5";"🪵";"holz, kleben, bauen, heimwerken";"";"";"Wood glue 750 g";"Waterproof, for indoor and outdoor use.";"";"Timber & Building Materials";"wood, glue, building, diy"
+"Bad & Sanitär";"Regenduschkopf";"Große Brause, kalkabweisend.";"29,90";"6";"🚿";"dusche, bad, wasser, sanitär";"regenduschkopf.svg";"";"Rain shower head";"Large head, limescale-resistant.";"";"Bathroom & Plumbing";"shower, bathroom, water, plumbing"
+"Bad & Sanitär";"Sanitär-Silikon weiß";"Schimmelhemmend, 310 ml.";"6,50";"6";"🚿";"bad, abdichten, kleben, sanitär, silikon";"sanitaer-silikon-weiss.svg";"";"Sanitary silicone white";"Mould-resistant, 310 ml.";"";"Bathroom & Plumbing";"bathroom, sealing, glue, plumbing, silicone"
+"Bad & Sanitär";"WC-Sitz mit Absenkautomatik";"Abnehmbar, leicht zu reinigen.";"39,90";"6";"🚿";"bad, wc, toilette, sanitär";"";"";"Toilet seat with soft close";"Removable, easy to clean.";"";"Bathroom & Plumbing";"bathroom, wc, toilet, plumbing"
+"Aktionen";"Wandfarbe weiß 5 l";"Aktionspreis, solange der Vorrat reicht.";"14,99";"8";"🏷️";"farbe, streichen, wand, renovieren, innen";"wandfarbe-weiss-5-l.svg";"";"White wall paint 5 l";"Special price while stocks last.";"";"Special Offers";"paint, painting, wall, renovation, interior"
 "Aktionen";"Werkzeugkoffer 108-teilig";"Aktionspreis, gefüllter Koffer.";"59,90";"8";"🏷️";"werkzeug, schrauben, bohren, heimwerken";"werkzeugkoffer-108-teilig.svg";"Gefüllter Koffer mit Schraubendrehern, Zangen, Bits, Steckschlüsseln und weiterem Zubehör.
-Die Einlagen halten alles an seinem Platz, der Koffer lässt sich gut tragen."
-"Aktionen";"Gartenhandschuhe 3er-Set";"Aktionspreis, in drei Größen.";"7,99";"8";"🏷️";"garten, schutz, handschuhe, pflanzen";"gartenhandschuhe-3er-set.svg";""
+Die Einlagen halten alles an seinem Platz, der Koffer lässt sich gut tragen.";"Tool case, 108 pieces";"Special price, filled case.";"Filled case with screwdrivers, pliers, bits, socket wrenches and further accessories.
+The inserts hold everything in place, and the case is easy to carry.";"Special Offers";"tools, screws, drilling, diy"
+"Aktionen";"Gartenhandschuhe 3er-Set";"Aktionspreis, in drei Größen.";"7,99";"8";"🏷️";"garten, schutz, handschuhe, pflanzen";"gartenhandschuhe-3er-set.svg";"";"Garden gloves, 3-pair set";"Special price, in three sizes.";"";"Special Offers";"garden, protection, gloves, plants"

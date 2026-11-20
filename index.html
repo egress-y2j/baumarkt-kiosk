@@ -97,7 +97,7 @@ textarea{min-height:150px;resize:none}
 
 <script>
 // Einstellungen (zum Testen kürzer setzen)
-var VERSION = "v10", IDLE_RESET = 45000, PIN = "1234";   // nach 45 s ohne Berührung zurück zur Startseite
+var VERSION = "v11", IDLE_RESET = 45000, PIN = "1234";   // nach 45 s ohne Berührung zurück zur Startseite
 
 var T = {
  de:{back:"Zurück",home:"Start",welcome:"Wie können wir helfen?",hSub:"Tippen Sie auf eine Kachel.",
@@ -146,25 +146,28 @@ function img(n){return encodeURI(/^(https?:)?\/\//.test(n)||n.indexOf("/")>-1?n:
 function picHtml(p){var ic=esc(CATS[p[1]][0]);if(!p[6])return "<span>"+ic+"</span>";
   return '<img src="'+esc(img(p[6]))+'" alt="" onerror="this.nextSibling.hidden=false;this.remove()"><span hidden>'+ic+'</span>'}
 function thumb(p,big){return HASIMG?'<span class="thumb'+(big?' big':'')+'">'+picHtml(p)+'</span>':""}
-function aisleBox(g){var a=AIS[g];if(!a||(!a.d&&!a.i))return "";
-  return '<div class="dir">'+(a.d?'<b>'+t("how")+'</b><br>'+esc(a.d):'')+(a.i?'<img class="gimg" src="'+esc(img(a.i))+'" alt="" onerror="this.remove()">':'')+'</div>'}
+function aisleBox(g){var a=AIS[g];if(!a||(!a.d&&!a.i))return "";var dd=(L==="en"&&a.e)||a.d;
+  return '<div class="dir">'+(dd?'<b>'+t("how")+'</b><br>'+esc(dd):'')+(a.i?'<img class="gimg" src="'+esc(img(a.i))+'" alt="" onerror="this.remove()">':'')+'</div>'}
 function preload(){var u=[],k=0;PRODS.forEach(function(p){if(p[6])u.push(img(p[6]))});Object.keys(AIS).forEach(function(g){if(AIS[g].i)u.push(img(AIS[g].i))});
   function nx(){if(k>=u.length)return;var im=new Image();im.onload=im.onerror=nx;im.src=u[k++]}
   setTimeout(function(){nx();nx();nx()},1500)}
+function tx(p,k){var r=p[9];return (L==="de"?"":r[k+"_"+L])||r[k]||""}
 function tagList(v){if(typeof v==="string")v=v.split(/[,;|]/);return (v||[]).map(function(x){return String(x).trim().toLowerCase()}).filter(function(x,i,a){return x&&a.indexOf(x)===i})}
 function similarBar(i){var p=PRODS[i],r=[];if(!p[5].length)return "";
   PRODS.forEach(function(q,j){if(j===i)return;var n=q[5].filter(function(x){return p[5].indexOf(x)>-1}).length;if(n)r.push([j,n])});
   r.sort(function(a,b){return b[1]-a[1]||a[0]-b[0]});r=r.slice(0,8);if(!r.length)return "";
-  return '<div class="similar"><h3>'+t("similar")+'</h3><div class="strip">'+r.map(function(x){var q=PRODS[x[0]];return '<button class="mini" onclick="go(\'prod\',{i:'+x[0]+'})">'+thumb(q,1)+'<b>'+esc(q[0])+'</b><span class="mute">'+t("aisle")+" "+esc(q[4])+" · "+esc(q[2])+' €</span></button>'}).join("")+'</div></div>'}
-function gCats(g){var o=[];PRODS.forEach(function(p){var n=CATS[p[1]][1];if(p[4]===g&&o.indexOf(n)<0)o.push(n)});return o.join(" · ")}
-function gOfCat(c){var o=[];PRODS.forEach(function(p){if(p[1]===c&&o.indexOf(p[4])<0)o.push(p[4])});return o.join(", ")}
+  return '<div class="similar"><h3>'+t("similar")+'</h3><div class="strip">'+r.map(function(x){var q=PRODS[x[0]];return '<button class="mini" onclick="go(\'prod\',{i:'+x[0]+'})">'+thumb(q,1)+'<b>'+esc(tx(q,"name"))+'</b><span class="mute">'+t("aisle")+" "+esc(q[4])+" · "+esc(q[2])+' €</span></button>'}).join("")+'</div></div>'}
+function gCats(g){var o=[];PRODS.forEach(function(p){if(p[4]!==g)return;p[8].forEach(function(i){var n=CATS[i][L==="de"?1:2];if(o.indexOf(n)<0)o.push(n)})});return o.join(" · ")}
+function gOfCat(c){var o=[];PRODS.forEach(function(p){if(p[8].indexOf(c)>-1&&o.indexOf(p[4])<0)o.push(p[4])});return o.join(", ")}
 function applyShop(d){
   SHOP=d;var names=d.categories.map(function(c){return c.name});
-  CATS=d.categories.map(function(c){return [c.icon||"📦",c.name,c.name]});
-  PRODS=d.products.map(function(p){return [p.name,names.indexOf(p.category),p.price||"",p.description||"",String(p.aisle||""),tagList(p.tags),String(p.image||""),String(p.longDescription||"")]}).filter(function(p){return p[1]>-1});
+  CATS=d.categories.map(function(c){return [c.icon||"📦",c.name,c.name_en||c.name]});
+  PRODS=d.products.map(function(p){var cs=(Array.isArray(p.category)?p.category:[p.category]).map(function(n){return names.indexOf(n)}).filter(function(i){return i>-1});
+    return [p.name,cs.length?cs[0]:-1,p.price||"",p.description||"",String(p.aisle||""),tagList(p.tags),String(p.image||""),String(p.longDescription||""),cs,p]}).filter(function(p){return p[1]>-1});
+  PRODS.forEach(function(p){var r=p[9];p[10]=[p[0],r.name_en||"",p[3],r.description_en||"",p[8].map(function(i){return d.categories[i].name+" "+(d.categories[i].name_en||"")}).join(" "),p[5].join(" "),tagList(r.tags_en).join(" ")].join(" ").toLowerCase()});
   GANGS=[];PRODS.forEach(function(p){if(GANGS.indexOf(p[4])<0)GANGS.push(p[4])});
   GANGS.sort(function(a,b){return a.localeCompare(b,"de",{numeric:true})});
-  AIS={};(d.aisles||[]).forEach(function(a){AIS[String(a.aisle)]={d:a.description||"",i:a.image||""}});HASIMG=PRODS.some(function(p){return p[6]});preload();
+  AIS={};(d.aisles||[]).forEach(function(a){AIS[String(a.aisle)]={d:a.description||"",e:a.description_en||"",i:a.image||""}});HASIMG=PRODS.some(function(p){return p[6]});preload();
   if(d.accent){var r=document.documentElement.style;r.setProperty("--acc",d.accent);r.setProperty("--on-acc",d.accentText||"#1f2a30")}
   $("#logo").innerHTML='<div class="mark">'+esc(d.logo||"🛒")+'</div>'+esc(d.name||"Kiosk");
   document.title=(d.name||"Kiosk")+" – Kiosk";
@@ -178,7 +181,7 @@ function loadShop(){
 }
 function go(n,p){clearTimeout(tThanks);V=Object.assign({n:n},p||{});render();M.scrollTop=0}
 function tile(cls,ic,title,sub,act){return '<button class="tile '+cls+'" onclick="'+act+'"><span class="ic">'+ic+'</span><span><b>'+title+'</b><br><small>'+sub+'</small></span></button>'}
-function prodRow(i){var p=PRODS[i];return '<button class="row" onclick="go(\'prod\',{i:'+i+'})">'+thumb(p)+'<span style="flex:1"><b>'+esc(p[0])+'</b><br><span class="mute">'+esc(p[3])+'</span></span><span class="price">'+esc(p[2])+' €</span></button>'}
+function prodRow(i){var p=PRODS[i];return '<button class="row" onclick="go(\'prod\',{i:'+i+'})">'+thumb(p)+'<span style="flex:1"><b>'+esc(tx(p,"name"))+'</b><br><span class="mute">'+esc(tx(p,"description"))+'</span></span><span class="price">'+esc(p[2])+' €</span></button>'}
 
 function render(){
   $("#back").hidden = V.n==="home"; $("#back").textContent = "← "+t("back");
@@ -189,13 +192,13 @@ function render(){
       tile("","🔎",t("search"),t("searchS"),"go('search')")+tile("","🧭",t("aisles"),t("aislesS"),"go('aisles')")+
       tile("","🧰",t("discover"),t("discoverS"),"go('cats')")+tile("","💬",t("fb"),t("fbS"),"startFb()")+'</div>';
   }else if(V.n==="cats"){
-    h = '<h2>'+t("cats")+'</h2><div class="grid" style="margin-top:18px">'+CATS.map(function(c,i){return tile("",esc(c[0]),cat(i),PRODS.filter(function(p){return p[1]===i}).length+" "+t("items"),"go('list',{c:"+i+"})")}).join("")+'</div>';
+    h = '<h2>'+t("cats")+'</h2><div class="grid" style="margin-top:18px">'+CATS.map(function(c,i){return tile("",esc(c[0]),cat(i),PRODS.filter(function(p){return p[8].indexOf(i)>-1}).length+" "+t("items"),"go('list',{c:"+i+"})")}).join("")+'</div>';
   }else if(V.n==="list"){
     var byG = V.g!==undefined, ttl = byG?esc(t("aisle")+" "+GANGS[V.g]):cat(V.c);
-    h = '<h2>'+ttl+'</h2><p class="mute">'+(byG?esc(gCats(GANGS[V.g])):esc(t("aisle")+" "+gOfCat(V.c)))+'</p>'+(byG?aisleBox(GANGS[V.g]):'')+PRODS.map(function(p,i){return (byG?p[4]===GANGS[V.g]:p[1]===V.c)?prodRow(i):""}).join("");
+    h = '<h2>'+ttl+'</h2><p class="mute">'+(byG?esc(gCats(GANGS[V.g])):esc(t("aisle")+" "+gOfCat(V.c)))+'</p>'+(byG?aisleBox(GANGS[V.g]):'')+PRODS.map(function(p,i){return (byG?p[4]===GANGS[V.g]:p[8].indexOf(V.c)>-1)?prodRow(i):""}).join("");
   }else if(V.n==="prod"){
     var p = PRODS[V.i];
-    h = '<div class="detail"><div class="pic">'+picHtml(p)+'</div><div><h1>'+esc(p[0])+'</h1><p>'+esc(p[3])+'</p><div class="big"><button class="gang" onclick="go(\'list\',{g:'+GANGS.indexOf(p[4])+'})">'+t("aisle")+" "+esc(p[4])+' ›</button><span>'+t("findIn")+" "+cat(p[1])+'</span></div><p class="price" style="font-size:34px;margin:0">'+esc(p[2])+' €</p>'+(p[7]?'<div class="long"><b>'+t("descT")+'</b><br>'+esc(p[7])+'</div>':'')+'</div></div>'+similarBar(V.i);
+    h = '<div class="detail"><div class="pic">'+picHtml(p)+'</div><div><h1>'+esc(tx(p,"name"))+'</h1><p>'+esc(tx(p,"description"))+'</p><div class="big"><button class="gang" onclick="go(\'list\',{g:'+GANGS.indexOf(p[4])+'})">'+t("aisle")+" "+esc(p[4])+' ›</button><span>'+t("findIn")+" "+p[8].map(cat).join(" · ")+'</span></div><p class="price" style="font-size:34px;margin:0">'+esc(p[2])+' €</p>'+(tx(p,"longDescription")?'<div class="long"><b>'+t("descT")+'</b><br>'+esc(tx(p,"longDescription"))+'</div>':'')+'</div></div>'+similarBar(V.i);
   }else if(V.n==="search"){
     h = '<h2>'+t("search")+'</h2><div style="margin:16px 0"><input type="search" id="q" placeholder="'+t("searchPh")+'" autocomplete="off" oninput="doSearch()"></div><div id="res"></div>';
   }else if(V.n==="aisles"){
@@ -226,7 +229,7 @@ function render(){
 }
 function doSearch(){
   var q = ($("#q")?$("#q").value:"").trim().toLowerCase(), r = $("#res");
-  var hits = PRODS.map(function(p,i){return i}).filter(function(i){var p=PRODS[i];return !q||(p[0]+" "+p[3]+" "+CATS[p[1]][1]+" "+p[5].join(" ")).toLowerCase().indexOf(q)>-1});
+  var hits = PRODS.map(function(p,i){return i}).filter(function(i){var p=PRODS[i];return !q||p[10].indexOf(q)>-1});
   r.innerHTML = hits.length?hits.map(prodRow).join(""):'<p class="mute">'+t("none")+'</p>';
 }
 function startFb(){FB={};go("fb",{s:1})}
