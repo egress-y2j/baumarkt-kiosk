@@ -35,6 +35,8 @@ main{flex:1;overflow:auto;padding:28px 36px}
 .tile.main{background:var(--acc);color:var(--on-acc);border-color:var(--acc)}
 .tile.main small{color:var(--on-acc)}
 .pic{overflow:hidden}
+button.gang{border:0;cursor:pointer}
+.long{margin-top:22px;padding-top:18px;border-top:2px solid var(--line);font-size:21px;line-height:1.55;white-space:pre-line;max-width:720px}
 .pic img{width:100%;height:100%;object-fit:contain;background:#fff}
 .thumb{width:76px;height:76px;flex:none;border-radius:10px;background:var(--bg);display:grid;place-items:center;font-size:40px;overflow:hidden}
 .thumb img{width:100%;height:100%;object-fit:cover}
@@ -95,7 +97,7 @@ textarea{min-height:150px;resize:none}
 
 <script>
 // Einstellungen (zum Testen kürzer setzen)
-var VERSION = "v9", IDLE_RESET = 45000, PIN = "1234";   // nach 45 s ohne Berührung zurück zur Startseite
+var VERSION = "v10", IDLE_RESET = 45000, PIN = "1234";   // nach 45 s ohne Berührung zurück zur Startseite
 
 var T = {
  de:{back:"Zurück",home:"Start",welcome:"Wie können wir helfen?",hSub:"Tippen Sie auf eine Kachel.",
@@ -104,7 +106,7 @@ var T = {
   cats:"Kategorien",aisle:"Gang",price:"Preis",findIn:"Zu finden in",searchPh:"Zum Beispiel „Bohrschrauber“",
   none:"Nichts gefunden. Bitte fragen Sie einen Mitarbeiter.",items:"Artikel",
   q1:"Wie zufrieden sind Sie insgesamt mit Ihrem Besuch?",q2:"Wie zufrieden sind Sie mit unserer Produktauswahl?",q3:"Wie zufrieden sind Sie mit dem Service?",
-  q:"Frage",of:"von",good:"Gut",ok:"Geht so",bad:"Schlecht",similar:"Ähnliche Produkte",how:"So kommen Sie hin",cph:"Kommentar (freiwillig), z. B. Lob oder Wunsch",cnote:"Bitte keine persönlichen Daten eintragen.",lblA:"Besuch",lblP:"Auswahl",lblS:"Service",lblC:"Sonstiges",
+  q:"Frage",of:"von",good:"Gut",ok:"Geht so",bad:"Schlecht",descT:"Produktbeschreibung",similar:"Ähnliche Produkte",how:"So kommen Sie hin",cph:"Kommentar (freiwillig), z. B. Lob oder Wunsch",cnote:"Bitte keine persönlichen Daten eintragen.",lblA:"Besuch",lblP:"Auswahl",lblS:"Service",lblC:"Sonstiges",
   commentT:"Möchten Sie uns noch etwas mitteilen?",commentP:"Ihre Anmerkung (freiwillig)",next:"Weiter",skip:"Überspringen",
   nlT:"Newsletter erhalten?",nlS:"Freiwillig. Wir informieren Sie über Angebote.",email:"E-Mail-Adresse",
   consent:"Ich willige ein, den Newsletter per E-Mail zu erhalten. Ich kann die Einwilligung jederzeit widerrufen.",
@@ -119,7 +121,7 @@ var T = {
   cats:"Categories",aisle:"Aisle",price:"Price",findIn:"Find it in",searchPh:"For example “drill”",
   none:"Nothing found. Please ask a team member.",items:"items",
   q1:"How satisfied are you with your visit overall?",q2:"How satisfied are you with our product range?",q3:"How satisfied are you with our service?",
-  q:"Question",of:"of",good:"Good",ok:"So-so",bad:"Poor",similar:"Similar products",how:"How to get there",cph:"Comment (optional), e.g. praise or a wish",cnote:"Please do not enter personal data.",lblA:"Visit",lblP:"Range",lblS:"Service",lblC:"Other",
+  q:"Question",of:"of",good:"Good",ok:"So-so",bad:"Poor",descT:"Product description",similar:"Similar products",how:"How to get there",cph:"Comment (optional), e.g. praise or a wish",cnote:"Please do not enter personal data.",lblA:"Visit",lblP:"Range",lblS:"Service",lblC:"Other",
   commentT:"Anything else you would like to tell us?",commentP:"Your comment (optional)",next:"Next",skip:"Skip",
   nlT:"Receive our newsletter?",nlS:"Optional. We will tell you about offers.",email:"Email address",
   consent:"I agree to receive the newsletter by email. I can withdraw my consent at any time.",
@@ -159,7 +161,7 @@ function gOfCat(c){var o=[];PRODS.forEach(function(p){if(p[1]===c&&o.indexOf(p[4
 function applyShop(d){
   SHOP=d;var names=d.categories.map(function(c){return c.name});
   CATS=d.categories.map(function(c){return [c.icon||"📦",c.name,c.name]});
-  PRODS=d.products.map(function(p){return [p.name,names.indexOf(p.category),p.price||"",p.description||"",String(p.aisle||""),tagList(p.tags),String(p.image||"")]}).filter(function(p){return p[1]>-1});
+  PRODS=d.products.map(function(p){return [p.name,names.indexOf(p.category),p.price||"",p.description||"",String(p.aisle||""),tagList(p.tags),String(p.image||""),String(p.longDescription||"")]}).filter(function(p){return p[1]>-1});
   GANGS=[];PRODS.forEach(function(p){if(GANGS.indexOf(p[4])<0)GANGS.push(p[4])});
   GANGS.sort(function(a,b){return a.localeCompare(b,"de",{numeric:true})});
   AIS={};(d.aisles||[]).forEach(function(a){AIS[String(a.aisle)]={d:a.description||"",i:a.image||""}});HASIMG=PRODS.some(function(p){return p[6]});preload();
@@ -184,8 +186,8 @@ function render(){
   var h = "";
   if(V.n==="home"){
     h = '<div class="home-grid">'+
-      tile("","🔎",t("search"),t("searchS"),"go('search')")+tile("","🧰",t("discover"),t("discoverS"),"go('cats')")+
-      tile("","🧭",t("aisles"),t("aislesS"),"go('aisles')")+tile("","💬",t("fb"),t("fbS"),"startFb()")+'</div>';
+      tile("","🔎",t("search"),t("searchS"),"go('search')")+tile("","🧭",t("aisles"),t("aislesS"),"go('aisles')")+
+      tile("","🧰",t("discover"),t("discoverS"),"go('cats')")+tile("","💬",t("fb"),t("fbS"),"startFb()")+'</div>';
   }else if(V.n==="cats"){
     h = '<h2>'+t("cats")+'</h2><div class="grid" style="margin-top:18px">'+CATS.map(function(c,i){return tile("",esc(c[0]),cat(i),PRODS.filter(function(p){return p[1]===i}).length+" "+t("items"),"go('list',{c:"+i+"})")}).join("")+'</div>';
   }else if(V.n==="list"){
@@ -193,7 +195,7 @@ function render(){
     h = '<h2>'+ttl+'</h2><p class="mute">'+(byG?esc(gCats(GANGS[V.g])):esc(t("aisle")+" "+gOfCat(V.c)))+'</p>'+(byG?aisleBox(GANGS[V.g]):'')+PRODS.map(function(p,i){return (byG?p[4]===GANGS[V.g]:p[1]===V.c)?prodRow(i):""}).join("");
   }else if(V.n==="prod"){
     var p = PRODS[V.i];
-    h = '<div class="detail"><div class="pic">'+picHtml(p)+'</div><div><h1>'+esc(p[0])+'</h1><p>'+esc(p[3])+'</p><div class="big"><span class="gang">'+t("aisle")+" "+esc(p[4])+'</span><span>'+t("findIn")+" "+cat(p[1])+'</span></div><p class="price" style="font-size:34px;margin:0">'+esc(p[2])+' €</p></div></div>'+similarBar(V.i);
+    h = '<div class="detail"><div class="pic">'+picHtml(p)+'</div><div><h1>'+esc(p[0])+'</h1><p>'+esc(p[3])+'</p><div class="big"><button class="gang" onclick="go(\'list\',{g:'+GANGS.indexOf(p[4])+'})">'+t("aisle")+" "+esc(p[4])+' ›</button><span>'+t("findIn")+" "+cat(p[1])+'</span></div><p class="price" style="font-size:34px;margin:0">'+esc(p[2])+' €</p>'+(p[7]?'<div class="long"><b>'+t("descT")+'</b><br>'+esc(p[7])+'</div>':'')+'</div></div>'+similarBar(V.i);
   }else if(V.n==="search"){
     h = '<h2>'+t("search")+'</h2><div style="margin:16px 0"><input type="search" id="q" placeholder="'+t("searchPh")+'" autocomplete="off" oninput="doSearch()"></div><div id="res"></div>';
   }else if(V.n==="aisles"){

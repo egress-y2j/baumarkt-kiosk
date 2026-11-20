@@ -1,7 +1,7 @@
 // Service Worker: speichert die App beim ersten Laden und liefert sie danach auch ohne Internet.
-// Bei Änderungen an der App die Versionsnummer erhöhen (kiosk-v9 -> kiosk-v10).
+// Bei Änderungen an der App die Versionsnummer erhöhen (kiosk-v10 -> kiosk-v11).
 // Bilder liegen in einem eigenen Speicher (kiosk-img) und bleiben bei App-Updates erhalten.
-var V = "kiosk-v9", IMG = "kiosk-img";
+var V = "kiosk-v10", IMG = "kiosk-img";
 var CORE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "shops/demo.json"];
 
 self.addEventListener("install", function (e) {
